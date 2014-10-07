@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Duke", "Duke\Duke.csproj", "{5324F08A-9923-4B28-9F15-BC7D8BA48EFA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.csproj", "{A42C9C5C-8F92-4395-B081-F44AC36BC562}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{5324F08A-9923-4B28-9F15-BC7D8BA48EFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5324F08A-9923-4B28-9F15-BC7D8BA48EFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5324F08A-9923-4B28-9F15-BC7D8BA48EFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A42C9C5C-8F92-4395-B081-F44AC36BC562}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A42C9C5C-8F92-4395-B081-F44AC36BC562}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A42C9C5C-8F92-4395-B081-F44AC36BC562}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A42C9C5C-8F92-4395-B081-F44AC36BC562}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

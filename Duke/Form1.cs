@@ -18,7 +18,7 @@ namespace Duke
 {
     public partial class Form1 : Form, IMessageFilter
     {
-        private string appName = "Duke Launcher v1.0";
+        private string appName = "Duke Launcher v1.1";
 
         private string appPath;
         private string appDir;
@@ -33,6 +33,9 @@ namespace Duke
         private string batDuke3d;
         private string pathSettings;
         private string cfgSettings;
+
+        private string exeShared;
+        private string exeLocal;
 
         private bool onceMinimized = false;
         private bool server = false;
@@ -87,7 +90,8 @@ namespace Duke
             }
 
             addLine(appName);
-            downloadNewMaps();
+            downloadNewMaps(false);
+            checkUpdate();
             textBox1.Focus();
         }
 
@@ -339,57 +343,40 @@ namespace Duke
             else picMapImage.Image = null;
         }
 
-        private void btnOpenShared_Click(object sender, EventArgs e)
-        {
-            if (Directory.Exists(pathSettings)) Process.Start(@pathSettings);
-        }
-
-        private void btnClearShared_Click(object sender, EventArgs e)
-        {
-            if (Directory.Exists(pathSettings))
-            {
-                string[] fileList = Directory.GetFiles(pathSettings, "*.*", SearchOption.TopDirectoryOnly);
-
-                foreach (string file in fileList)
-                {
-                    if (file != cfgSettings) File.Delete(file);
-                }
-
-                addLine("");
-                addLine("Shared folder cleared.");
-            }
-        }
-
         private void btnUploadMap_Click(object sender, EventArgs e)
         {
             if (Directory.Exists(pathSettings) &&
                 Directory.Exists(pathDuke3d))
             {
+                addLine("");
                 if (lstMaps.SelectedItems.Count > 0)
                 {
-                    string mapFileSource = Path.Combine(pathDuke3d, lstMaps.SelectedItems[0].Text);
-                    string mapFileDestination = Path.Combine(pathSettings, lstMaps.SelectedItems[0].Text);
-
-                    string mapImageSource = Path.Combine(pathDuke3d, Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text)) + ".PNG";
-                    string mapImageDestination = Path.Combine(pathSettings, Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text)) + ".PNG";
-
-                    if (File.Exists(mapFileSource) && Directory.Exists(pathSettings))
+                    foreach (ListViewItem map in lstMaps.SelectedItems)
                     {
-                        if (File.Exists(mapFileDestination)) File.Delete(mapFileDestination);
-                        File.Copy(mapFileSource, mapFileDestination);
-                        addLine("");
-                        addLine("Map \"" + lstMaps.SelectedItems[0].Text + "\" uploaded.");
+                        string mapFileSource = Path.Combine(pathDuke3d, map.Text);
+                        string mapFileDestination = Path.Combine(pathSettings, map.Text);
 
-                        if (File.Exists(mapImageSource))
+                        string mapImageSource = Path.Combine(pathDuke3d, Path.GetFileNameWithoutExtension(map.Text)) + ".PNG";
+                        string mapImageDestination = Path.Combine(pathSettings, Path.GetFileNameWithoutExtension(map.Text)) + ".PNG";
+
+                        if (File.Exists(mapFileSource) && Directory.Exists(pathSettings))
                         {
-                            if (File.Exists(mapImageDestination)) File.Delete(mapImageDestination);
-                            File.Copy(mapImageSource, mapImageDestination);
+                            if (File.Exists(mapFileDestination)) File.Delete(mapFileDestination);
+                            File.Copy(mapFileSource, mapFileDestination);
+                            addLine("Map \"" + map.Text + "\" uploaded.");
+
+                            if (File.Exists(mapImageSource))
+                            {
+                                if (File.Exists(mapImageDestination)) File.Delete(mapImageDestination);
+                                File.Copy(mapImageSource, mapImageDestination);
+                                string filenameImage = Path.GetFileNameWithoutExtension(map.Text) + ".PNG";
+                                addLine("Image \"" + filenameImage + "\" uploaded.");
+                            }
                         }
                     }
                 }
                 else
                 {
-                    addLine("");
                     addLine("No maps selected.");
                 }
             }
@@ -397,7 +384,7 @@ namespace Duke
 
         private void btnDownloadMaps_Click(object sender, EventArgs e)
         {
-            downloadNewMaps();
+            downloadNewMaps(true);
         }
 
         private void picMapImage_DoubleClick(object sender, EventArgs e)
@@ -406,26 +393,30 @@ namespace Duke
             if (File.Exists(mapImage)) Process.Start(@mapImage);
         }
 
-        private void btnRefreshMaps_Click(object sender, EventArgs e)
+        private void btnUpdate_Click(object sender, EventArgs e)
         {
-            string currentMap = lstMaps.SelectedItems[0].Text;
-            readMaps();
-            picMapImage.Image = null;
-
-            foreach (ListViewItem map in lstMaps.Items)
+            string exeUpdate = Path.Combine(appDir, "Updater.exe");
+            if (File.Exists(exeUpdate))
             {
-                if (map.Text == currentMap)
-                {
-                    map.Selected = true;
-                    lstMaps.EnsureVisible(lstMaps.SelectedItems[0].Index);
-                }
+                Process.Start(exeUpdate);
+                this.Close();
             }
-
-            addLine("");
-            addLine("Map list refreshed.");
         }
  
+        private void btnDukeOpen_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(txtDukePath.Text)) Process.Start(@txtDukePath.Text);
+        }
 
+        private void btnDosBoxOpen_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(txtDosBoxPath.Text)) Process.Start(@txtDosBoxPath.Text);
+        }
+
+        private void btnSharedOpen_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(txtSharedConfig.Text)) Process.Start(@txtSharedConfig.Text);
+        }
 
     }
 }

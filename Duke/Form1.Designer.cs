@@ -58,10 +58,11 @@
             this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.picMapImage = new System.Windows.Forms.PictureBox();
             this.btnUploadMap = new System.Windows.Forms.Button();
-            this.btnClearShared = new System.Windows.Forms.Button();
             this.btnDownloadMaps = new System.Windows.Forms.Button();
-            this.btnOpenShared = new System.Windows.Forms.Button();
-            this.btnRefreshMaps = new System.Windows.Forms.Button();
+            this.btnUpdate = new System.Windows.Forms.Button();
+            this.btnDukeOpen = new System.Windows.Forms.Button();
+            this.btnDosBoxOpen = new System.Windows.Forms.Button();
+            this.btnSharedOpen = new System.Windows.Forms.Button();
             this.lstIp = new Duke.VisualStylesListView();
             this.clmIp = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clmAdapter = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -104,7 +105,7 @@
             this.txtDukePath.Location = new System.Drawing.Point(129, 519);
             this.txtDukePath.Name = "txtDukePath";
             this.txtDukePath.ReadOnly = true;
-            this.txtDukePath.Size = new System.Drawing.Size(455, 20);
+            this.txtDukePath.Size = new System.Drawing.Size(368, 20);
             this.txtDukePath.TabIndex = 7;
             // 
             // label1
@@ -118,9 +119,9 @@
             // 
             // btnDukePath
             // 
-            this.btnDukePath.Location = new System.Drawing.Point(595, 517);
+            this.btnDukePath.Location = new System.Drawing.Point(510, 517);
             this.btnDukePath.Name = "btnDukePath";
-            this.btnDukePath.Size = new System.Drawing.Size(89, 23);
+            this.btnDukePath.Size = new System.Drawing.Size(90, 23);
             this.btnDukePath.TabIndex = 9;
             this.btnDukePath.Text = "Select folder...";
             this.btnDukePath.UseVisualStyleBackColor = true;
@@ -132,7 +133,7 @@
             this.txtDosBoxPath.Location = new System.Drawing.Point(129, 552);
             this.txtDosBoxPath.Name = "txtDosBoxPath";
             this.txtDosBoxPath.ReadOnly = true;
-            this.txtDosBoxPath.Size = new System.Drawing.Size(455, 20);
+            this.txtDosBoxPath.Size = new System.Drawing.Size(368, 20);
             this.txtDosBoxPath.TabIndex = 10;
             // 
             // label2
@@ -146,9 +147,9 @@
             // 
             // btnDosBoxPath
             // 
-            this.btnDosBoxPath.Location = new System.Drawing.Point(595, 550);
+            this.btnDosBoxPath.Location = new System.Drawing.Point(510, 550);
             this.btnDosBoxPath.Name = "btnDosBoxPath";
-            this.btnDosBoxPath.Size = new System.Drawing.Size(89, 23);
+            this.btnDosBoxPath.Size = new System.Drawing.Size(90, 23);
             this.btnDosBoxPath.TabIndex = 12;
             this.btnDosBoxPath.Text = "Select folder...";
             this.btnDosBoxPath.UseVisualStyleBackColor = true;
@@ -160,7 +161,7 @@
             this.txtSharedConfig.Location = new System.Drawing.Point(129, 585);
             this.txtSharedConfig.Name = "txtSharedConfig";
             this.txtSharedConfig.ReadOnly = true;
-            this.txtSharedConfig.Size = new System.Drawing.Size(455, 20);
+            this.txtSharedConfig.Size = new System.Drawing.Size(368, 20);
             this.txtSharedConfig.TabIndex = 13;
             // 
             // label3
@@ -174,9 +175,9 @@
             // 
             // btnSharedConfig
             // 
-            this.btnSharedConfig.Location = new System.Drawing.Point(595, 583);
+            this.btnSharedConfig.Location = new System.Drawing.Point(510, 583);
             this.btnSharedConfig.Name = "btnSharedConfig";
-            this.btnSharedConfig.Size = new System.Drawing.Size(89, 23);
+            this.btnSharedConfig.Size = new System.Drawing.Size(90, 23);
             this.btnSharedConfig.TabIndex = 15;
             this.btnSharedConfig.Text = "Select folder...";
             this.btnSharedConfig.UseVisualStyleBackColor = true;
@@ -250,19 +251,9 @@
             this.btnUploadMap.Name = "btnUploadMap";
             this.btnUploadMap.Size = new System.Drawing.Size(174, 28);
             this.btnUploadMap.TabIndex = 21;
-            this.btnUploadMap.Text = "Upload selected map";
+            this.btnUploadMap.Text = "Upload selected maps";
             this.btnUploadMap.UseVisualStyleBackColor = true;
             this.btnUploadMap.Click += new System.EventHandler(this.btnUploadMap_Click);
-            // 
-            // btnClearShared
-            // 
-            this.btnClearShared.Location = new System.Drawing.Point(375, 462);
-            this.btnClearShared.Name = "btnClearShared";
-            this.btnClearShared.Size = new System.Drawing.Size(174, 28);
-            this.btnClearShared.TabIndex = 22;
-            this.btnClearShared.Text = "Clear shared folder";
-            this.btnClearShared.UseVisualStyleBackColor = true;
-            this.btnClearShared.Click += new System.EventHandler(this.btnClearShared_Click);
             // 
             // btnDownloadMaps
             // 
@@ -274,25 +265,45 @@
             this.btnDownloadMaps.UseVisualStyleBackColor = true;
             this.btnDownloadMaps.Click += new System.EventHandler(this.btnDownloadMaps_Click);
             // 
-            // btnOpenShared
+            // btnUpdate
             // 
-            this.btnOpenShared.Location = new System.Drawing.Point(375, 428);
-            this.btnOpenShared.Name = "btnOpenShared";
-            this.btnOpenShared.Size = new System.Drawing.Size(174, 28);
-            this.btnOpenShared.TabIndex = 24;
-            this.btnOpenShared.Text = "Open shared folder";
-            this.btnOpenShared.UseVisualStyleBackColor = true;
-            this.btnOpenShared.Click += new System.EventHandler(this.btnOpenShared_Click);
+            this.btnUpdate.Location = new System.Drawing.Point(191, 462);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Size = new System.Drawing.Size(174, 28);
+            this.btnUpdate.TabIndex = 25;
+            this.btnUpdate.Text = "Check for program update";
+            this.btnUpdate.UseVisualStyleBackColor = true;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
-            // btnRefreshMaps
+            // btnDukeOpen
             // 
-            this.btnRefreshMaps.Location = new System.Drawing.Point(191, 462);
-            this.btnRefreshMaps.Name = "btnRefreshMaps";
-            this.btnRefreshMaps.Size = new System.Drawing.Size(174, 28);
-            this.btnRefreshMaps.TabIndex = 25;
-            this.btnRefreshMaps.Text = "Refresh map list";
-            this.btnRefreshMaps.UseVisualStyleBackColor = true;
-            this.btnRefreshMaps.Click += new System.EventHandler(this.btnRefreshMaps_Click);
+            this.btnDukeOpen.Location = new System.Drawing.Point(609, 517);
+            this.btnDukeOpen.Name = "btnDukeOpen";
+            this.btnDukeOpen.Size = new System.Drawing.Size(75, 23);
+            this.btnDukeOpen.TabIndex = 26;
+            this.btnDukeOpen.Text = "Open folder";
+            this.btnDukeOpen.UseVisualStyleBackColor = true;
+            this.btnDukeOpen.Click += new System.EventHandler(this.btnDukeOpen_Click);
+            // 
+            // btnDosBoxOpen
+            // 
+            this.btnDosBoxOpen.Location = new System.Drawing.Point(609, 550);
+            this.btnDosBoxOpen.Name = "btnDosBoxOpen";
+            this.btnDosBoxOpen.Size = new System.Drawing.Size(75, 23);
+            this.btnDosBoxOpen.TabIndex = 27;
+            this.btnDosBoxOpen.Text = "Open folder";
+            this.btnDosBoxOpen.UseVisualStyleBackColor = true;
+            this.btnDosBoxOpen.Click += new System.EventHandler(this.btnDosBoxOpen_Click);
+            // 
+            // btnSharedOpen
+            // 
+            this.btnSharedOpen.Location = new System.Drawing.Point(609, 583);
+            this.btnSharedOpen.Name = "btnSharedOpen";
+            this.btnSharedOpen.Size = new System.Drawing.Size(75, 23);
+            this.btnSharedOpen.TabIndex = 28;
+            this.btnSharedOpen.Text = "Open folder";
+            this.btnSharedOpen.UseVisualStyleBackColor = true;
+            this.btnSharedOpen.Click += new System.EventHandler(this.btnSharedOpen_Click);
             // 
             // lstIp
             // 
@@ -351,7 +362,6 @@
             this.clmMaps});
             this.lstMaps.FullRowSelect = true;
             this.lstMaps.Location = new System.Drawing.Point(12, 14);
-            this.lstMaps.MultiSelect = false;
             this.lstMaps.Name = "lstMaps";
             this.lstMaps.Size = new System.Drawing.Size(167, 336);
             this.lstMaps.TabIndex = 1;
@@ -369,10 +379,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(697, 618);
-            this.Controls.Add(this.btnRefreshMaps);
-            this.Controls.Add(this.btnOpenShared);
+            this.Controls.Add(this.btnSharedOpen);
+            this.Controls.Add(this.btnDosBoxOpen);
+            this.Controls.Add(this.btnDukeOpen);
+            this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnDownloadMaps);
-            this.Controls.Add(this.btnClearShared);
             this.Controls.Add(this.btnUploadMap);
             this.Controls.Add(this.picMapImage);
             this.Controls.Add(this.txtPlayerName);
@@ -436,10 +447,11 @@
         private System.Windows.Forms.Timer timer3;
         private System.Windows.Forms.PictureBox picMapImage;
         private System.Windows.Forms.Button btnUploadMap;
-        private System.Windows.Forms.Button btnClearShared;
         private System.Windows.Forms.Button btnDownloadMaps;
-        private System.Windows.Forms.Button btnOpenShared;
-        private System.Windows.Forms.Button btnRefreshMaps;
+        private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.Button btnDukeOpen;
+        private System.Windows.Forms.Button btnDosBoxOpen;
+        private System.Windows.Forms.Button btnSharedOpen;
     }
 }
 

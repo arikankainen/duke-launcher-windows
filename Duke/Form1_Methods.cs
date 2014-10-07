@@ -34,6 +34,9 @@ namespace Duke
             batDuke3d = Path.Combine(pathDuke3d, "dukiaine.bat");
             cfgSettings = Path.Combine(pathSettings, "dukiainen.txt");
 
+            exeShared = Path.Combine(pathSettings, "Duke.exe");
+            exeLocal = Path.Combine(appDir, "Duke.exe");
+
             if (Directory.Exists(pathDuke3d))
             {
                 string[] cfgList = Directory.GetFiles(pathDuke3d, "*.cfg", SearchOption.TopDirectoryOnly);
@@ -43,6 +46,28 @@ namespace Duke
             if (Directory.Exists(pathDuke3d)) readMaps();
             if (File.Exists(cfgDuke3d)) txtPlayerName.Text = readName();
 
+        }
+
+        private void checkUpdate()
+        {
+            if (Directory.Exists(txtSharedConfig.Text))
+            {
+                if (File.Exists(exeShared) && File.Exists(exeLocal))
+                {
+                    var versionInfoShared = FileVersionInfo.GetVersionInfo(exeShared);
+                    string versionSharedString = versionInfoShared.ProductVersion.Substring(0, 3);
+                    int versionShared = Convert.ToInt32(versionInfoShared.ProductVersion.Replace(".", ""));
+
+                    var versionInfoLocal = FileVersionInfo.GetVersionInfo(exeLocal);
+                    string versionLocalString = versionInfoLocal.ProductVersion.Substring(0, 3);
+                    int versionLocal = Convert.ToInt32(versionInfoLocal.ProductVersion.Replace(".", ""));
+
+                    if (versionShared > versionLocal)
+                    {
+                        addLine("Program update available. Get it now!");
+                    }
+                }
+            }
         }
 
         private void readMaps()
@@ -214,9 +239,7 @@ namespace Duke
             btnSharedConfig.Enabled = false;
             btnUploadMap.Enabled = false;
             btnDownloadMaps.Enabled = false;
-            btnOpenShared.Enabled = false;
-            btnClearShared.Enabled = false;
-            btnRefreshMaps.Enabled = false;
+            btnUpdate.Enabled = false;
         }
 
         private void enableAll()
@@ -234,9 +257,7 @@ namespace Duke
             btnSharedConfig.Enabled = true;
             btnUploadMap.Enabled = true;
             btnDownloadMaps.Enabled = true;
-            btnOpenShared.Enabled = true;
-            btnClearShared.Enabled = true;
-            btnRefreshMaps.Enabled = true;
+            btnUpdate.Enabled = true;
         }
 
         private void centerForm()
@@ -250,14 +271,14 @@ namespace Duke
             this.Left = screen.WorkingArea.Left + ((screen.WorkingArea.Width / 2) - (this.Width / 2));
         }
 
-        private void downloadNewMaps()
+        private void downloadNewMaps(bool showAllMessages)
         {
             if (Directory.Exists(pathSettings) &&
                 Directory.Exists(pathDuke3d))
             {
                 string[] fileList = Directory.GetFiles(pathSettings, "*.map", SearchOption.TopDirectoryOnly);
                 bool found = false;
-                addLine("");
+                if (showAllMessages) addLine("");
 
                 if (fileList.Count() > 0)
                 {
@@ -346,7 +367,7 @@ namespace Duke
                 }
                 if (!found)
                 {
-                    addLine("No new maps found.");
+                    if (showAllMessages) addLine("No new maps found.");
                 }
             }
         }
