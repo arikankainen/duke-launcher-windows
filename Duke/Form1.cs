@@ -18,29 +18,38 @@ namespace Duke
 {
     public partial class Form1 : Form, IMessageFilter
     {
-        private string appName = "Duke Launcher v1.1";
+        private string appName = "Duke Launcher v1.2";
 
         private string appPath;
         private string appDir;
         private string appFile;
         private string appCfg;
 
-        private string pathDuke3d;
         private string exeDosBox;
-        private string exeCommit;
-        private string cfgCommit;
-        private string cfgDuke3d;
-        private string batDuke3d;
-        private string pathSettings;
-        private string cfgSettings;
+        private string pathDosBox;
+        private string pathDosBoxCapture;
+        private string pathShared;
+        private string cfgShared;
+
+        private string exeGameCommit;
+        private string cfgGameCommit;
+        private string cfgGame;
+        private string batGame;
+        private string pathGame;
 
         private string exeShared;
         private string exeLocal;
+
+        private string lastMapPlayed;
 
         private bool onceMinimized = false;
         private bool server = false;
         private bool client = false;
         private string timeOld;
+
+        private string comboGameOld;
+
+        private string playersSelected, mapSelected, ipSelected;
 
         private Settings settings = new Settings();
         private Process process;
@@ -58,53 +67,49 @@ namespace Duke
 
         private void Form1_Shown(object sender, EventArgs e)
         {
-            txtDukePath.Text = settings.LoadSetting("DukeFolder");
-            txtDosBoxPath.Text = settings.LoadSetting("DOSBoxFolder");
-            txtSharedConfig.Text = settings.LoadSetting("SharedConfigFolder");
-            string players = settings.LoadSetting("NumPlayers");
-            string map = settings.LoadSetting("SelectedMap");
-            string ip = settings.LoadSetting("IP");
+            string selectedGame = settings.LoadSetting("SelectedGame");
+            if (selectedGame == "") selectedGame = "Duke Nukem 3D";
+            comboGame.Text = selectedGame;
+            comboGameOld = comboGame.Text;
 
             updatePaths();
+            reselectGame();
 
             listIp();
             resizeColumns();
 
-            foreach (ListViewItem item in lstMaps.Items)
-            {
-                if (map == item.Text)
-                {
-                    item.Selected = true;
-                    lstMaps.EnsureVisible(lstMaps.SelectedItems[0].Index);
-                }
-            }
-
-            foreach (ListViewItem item in lstPlayers.Items)
-            {
-                if (players == item.Text) item.Selected = true;
-            }
-
-            foreach (ListViewItem item in lstIp.Items)
-            {
-                if (ip == item.Text) item.Selected = true;
-            }
-
+            selectItems();
+            
             addLine(appName);
-            downloadNewMaps(false);
+            //downloadNewMaps(false);
             checkUpdate();
             textBox1.Focus();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (txtDukePath.Text != "") settings.SaveSetting("DukeFolder", txtDukePath.Text);
-            if (txtDosBoxPath.Text != "") settings.SaveSetting("DOSBoxFolder", txtDosBoxPath.Text);
-            if (txtSharedConfig.Text != "") settings.SaveSetting("SharedConfigFolder", txtSharedConfig.Text);
-            if (lstPlayers.SelectedItems.Count > 0) settings.SaveSetting("NumPlayers", lstPlayers.SelectedItems[0].Text);
-            if (lstMaps.SelectedItems.Count > 0) settings.SaveSetting("SelectedMap", lstMaps.SelectedItems[0].Text);
-            if (lstIp.SelectedItems.Count > 0) settings.SaveSetting("IP", lstIp.SelectedItems[0].Text);
+            if (comboGame.Text == "Duke Nukem 3D")
+            {
+                if (txtGamePath.Text != "") settings.SaveSetting("DukeFolder", txtGamePath.Text);
+                if (lstPlayers.SelectedItems.Count > 0) settings.SaveSetting("DukeNumPlayers", lstPlayers.SelectedItems[0].Text);
+                if (lstMaps.SelectedItems.Count > 0) settings.SaveSetting("DukeSelectedMap", lstMaps.SelectedItems[0].Text);
+                settings.SaveSetting("SelectedGame", "Duke Nukem 3D");
+            }
 
-            if (File.Exists(cfgSettings)) File.Delete(cfgSettings);
+            if (comboGame.Text == "Shadow Warrior")
+            {
+                if (txtGamePath.Text != "") settings.SaveSetting("SWFolder", txtGamePath.Text);
+                if (lstPlayers.SelectedItems.Count > 0) settings.SaveSetting("SWNumPlayers", lstPlayers.SelectedItems[0].Text);
+                if (lstMaps.SelectedItems.Count > 0) settings.SaveSetting("SWSelectedMap", lstMaps.SelectedItems[0].Text);
+                settings.SaveSetting("SelectedGame", "Shadow Warrior");
+            }
+
+            if (lstIp.SelectedItems.Count > 0) settings.SaveSetting("IP", lstIp.SelectedItems[0].Text);
+            if (txtDosBoxPath.Text != "") settings.SaveSetting("DOSBoxFolder", txtDosBoxPath.Text);
+            if (txtDosBoxCapturePath.Text != "") settings.SaveSetting("DOSBoxCaptureFolder", txtDosBoxCapturePath.Text);
+            if (txtSharedConfig.Text != "") settings.SaveSetting("SharedConfigFolder", txtSharedConfig.Text);
+
+            if (File.Exists(cfgShared)) File.Delete(cfgShared);
             if (txtPlayerName.Text != "") modifyName(txtPlayerName.Text);
         }
 
@@ -112,16 +117,17 @@ namespace Duke
         {
             if (!server && !client)
             {
-                if (File.Exists(cfgSettings) &&
-                  Directory.Exists(pathDuke3d) &&
+                if (File.Exists(cfgShared) &&
+                  Directory.Exists(pathGame) &&
                   File.Exists(exeDosBox) &&
                   txtPlayerName.Text != "")
                 {
                     try
                     {
-                        using (StreamReader reader = File.OpenText(cfgSettings))
+                        using (StreamReader reader = File.OpenText(cfgShared))
                         {
                             string time = reader.ReadLine();
+                            string game = reader.ReadLine();
                             string name = reader.ReadLine();
                             string ip = reader.ReadLine();
                             string map = reader.ReadLine();
@@ -130,12 +136,31 @@ namespace Duke
                             if (timeOld != time)
                             {
                                 timer1.Stop();
+                                comboGame.Text = game;
+                                comboChanged();
+
                                 disableAll();
                                 client = true;
 
+                                mapSelected = map;
+                                playersSelected = players;
+                                
+                                if (lstMaps.SelectedItems.Count > 0)
+                                {
+                                    foreach (ListViewItem item in lstMaps.SelectedItems)
+                                    {
+                                        item.Selected = false;
+                                    }
+                                }
+                                selectItems();
+
                                 addLine("");
                                 addLine("Player \"" + name + "\" started server (" + ip + ").");
-                                addLine("Map \"" + map + "\" (" + players + " players).");
+                                addLine("Game \"" + game + "\" (" + players + " players).");
+                                addLine("Map \"" + map + "\"");
+
+                                lastMapPlayed = map;
+
                                 timer3.Start();
                             }
                             timeOld = time;
@@ -150,9 +175,10 @@ namespace Duke
         {
             try
             {
-                using (StreamReader reader = File.OpenText(cfgSettings))
+                using (StreamReader reader = File.OpenText(cfgShared))
                 {
                     string time = reader.ReadLine();
+                    string game = reader.ReadLine();
                     string name = reader.ReadLine();
                     string ip = reader.ReadLine();
                     string map = reader.ReadLine();
@@ -161,12 +187,12 @@ namespace Duke
                     timer3.Stop();
 
                     addLine("");
-                    addLine("Launching Duke...");
+                    addLine("Launching game...");
 
                     modifyPlayers(Convert.ToInt32(players));
                     modifyName(txtPlayerName.Text);
 
-                    using (StreamWriter writer = File.CreateText(batDuke3d))
+                    using (StreamWriter writer = File.CreateText(batGame))
                     {
                         writer.WriteLine("ipxnet connect " + ip);
                         writer.WriteLine("commit.exe -map " + map);
@@ -178,7 +204,7 @@ namespace Duke
                     startInfo.UseShellExecute = false;
                     startInfo.FileName = exeDosBox;
                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    startInfo.Arguments = batDuke3d + " -noconsole";
+                    startInfo.Arguments = batGame + " -noconsole";
                     process = Process.Start(startInfo);
 
                     gameStarted = DateTime.Now;
@@ -205,6 +231,9 @@ namespace Duke
                 if (server) deleteSharedConfig();
                 server = false;
                 client = false;
+
+                saveCapture();
+                
                 timer1.Start();
             }
             else
@@ -222,8 +251,8 @@ namespace Duke
             if (lstMaps.SelectedItems.Count > 0 &&
                 lstPlayers.SelectedItems.Count > 0 &&
                 lstIp.SelectedItems.Count > 0 &&
-                Directory.Exists(pathSettings) &&
-                Directory.Exists(pathDuke3d) &&
+                Directory.Exists(pathShared) &&
+                Directory.Exists(pathGame) &&
                 File.Exists(exeDosBox) &&
                 txtPlayerName.Text != "")
             {
@@ -231,7 +260,7 @@ namespace Duke
 
                 addLine("");
                 addLine("Server started.");
-                addLine("Launching Duke...");
+                addLine("Launching game...");
 
                 int tries = 0;
                 do
@@ -242,19 +271,21 @@ namespace Duke
                 modifyPlayers(Convert.ToInt32(lstPlayers.SelectedItems[0].Text));
                 modifyName(txtPlayerName.Text);
 
-                using (StreamWriter writer = File.CreateText(batDuke3d))
+                using (StreamWriter writer = File.CreateText(batGame))
                 {
                     writer.WriteLine("ipxnet startserver");
                     writer.WriteLine("commit.exe -map " + lstMaps.SelectedItems[0].Text);
                     writer.WriteLine("exit");
                 }
 
+                lastMapPlayed = lstMaps.SelectedItems[0].Text;
+
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.CreateNoWindow = false;
                 startInfo.UseShellExecute = false;
                 startInfo.FileName = exeDosBox;
                 startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                startInfo.Arguments = batDuke3d + " -noconsole";
+                startInfo.Arguments = batGame + " -noconsole";
                 process = Process.Start(startInfo);
 
                 gameStarted = DateTime.Now;
@@ -268,16 +299,17 @@ namespace Duke
             FolderBrowserDialog folder = new FolderBrowserDialog();
 
             folder.ShowNewFolderButton = false;
-            folder.Description = "Select Duke3D folder:";
+            folder.Description = "Select game folder:";
 
             DialogResult result = folder.ShowDialog();
-            if (folder.SelectedPath != "") txtDukePath.Text = folder.SelectedPath;
+            if (folder.SelectedPath != "") txtGamePath.Text = folder.SelectedPath;
             updatePaths();
-            if (Directory.Exists(pathDuke3d)) readMaps();
+            if (Directory.Exists(pathGame)) readMaps();
+            resizeColumns();
             resizeColumns();
 
             addLine("");
-            addLine("Path for Duke added.");
+            addLine("Game folder added.");
 
         }
 
@@ -292,9 +324,26 @@ namespace Duke
             DialogResult result = folder.ShowDialog();
             if (folder.SelectedPath != "") txtDosBoxPath.Text = folder.SelectedPath;
             updatePaths();
+            resizeColumns();
 
             addLine("");
-            addLine("Path for DOSBox added.");
+            addLine("DOSBox folder added.");
+        }
+
+        private void btnDosBoxCapturePath_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folder = new FolderBrowserDialog();
+
+            folder.ShowNewFolderButton = false;
+            folder.Description = "Select DOSBox capture folder:\r\nUsually something like that: C:\\Users\\username\\AppData\\Local\\DOSBox\\capture";
+
+            DialogResult result = folder.ShowDialog();
+            if (folder.SelectedPath != "") txtDosBoxCapturePath.Text = folder.SelectedPath;
+            updatePaths();
+            resizeColumns();
+
+            addLine("");
+            addLine("DOSBox capture folder added.");
         }
 
         private void btnSharedConfig_Click(object sender, EventArgs e)
@@ -307,9 +356,10 @@ namespace Duke
             DialogResult result = folder.ShowDialog();
             if (folder.SelectedPath != "") txtSharedConfig.Text = folder.SelectedPath;
             updatePaths();
+            resizeColumns();
 
             addLine("");
-            addLine("Path for shared folder added.");
+            addLine("Shared folder added.");
         }
 
         private void txtPlayerName_KeyDown(object sender, KeyEventArgs e)
@@ -330,7 +380,7 @@ namespace Duke
         {
             if (lstMaps.SelectedItems.Count > 0)
             {
-                string mapImage = Path.Combine(pathDuke3d, Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text)) + ".png";
+                string mapImage = Path.Combine(pathGame, Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text)) + ".png";
                 if (File.Exists(mapImage))
                 {
                     FileStream fs;
@@ -345,21 +395,21 @@ namespace Duke
 
         private void btnUploadMap_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists(pathSettings) &&
-                Directory.Exists(pathDuke3d))
+            if (Directory.Exists(Path.Combine(pathShared, comboGame.Text)) &&
+                Directory.Exists(pathGame))
             {
                 addLine("");
                 if (lstMaps.SelectedItems.Count > 0)
                 {
                     foreach (ListViewItem map in lstMaps.SelectedItems)
                     {
-                        string mapFileSource = Path.Combine(pathDuke3d, map.Text);
-                        string mapFileDestination = Path.Combine(pathSettings, map.Text);
+                        string mapFileSource = Path.Combine(pathGame, map.Text);
+                        string mapFileDestination = Path.Combine(Path.Combine(pathShared, comboGame.Text), map.Text);
 
-                        string mapImageSource = Path.Combine(pathDuke3d, Path.GetFileNameWithoutExtension(map.Text)) + ".PNG";
-                        string mapImageDestination = Path.Combine(pathSettings, Path.GetFileNameWithoutExtension(map.Text)) + ".PNG";
+                        string mapImageSource = Path.Combine(pathGame, Path.GetFileNameWithoutExtension(map.Text)) + ".PNG";
+                        string mapImageDestination = Path.Combine(Path.Combine(pathShared, comboGame.Text), Path.GetFileNameWithoutExtension(map.Text)) + ".PNG";
 
-                        if (File.Exists(mapFileSource) && Directory.Exists(pathSettings))
+                        if (File.Exists(mapFileSource) && Directory.Exists(Path.Combine(pathShared, comboGame.Text)))
                         {
                             if (File.Exists(mapFileDestination)) File.Delete(mapFileDestination);
                             File.Copy(mapFileSource, mapFileDestination);
@@ -389,7 +439,7 @@ namespace Duke
 
         private void picMapImage_DoubleClick(object sender, EventArgs e)
         {
-            string mapImage = Path.Combine(pathDuke3d, Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text)) + ".PNG";
+            string mapImage = Path.Combine(pathGame, Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text)) + ".PNG";
             if (File.Exists(mapImage)) Process.Start(@mapImage);
         }
 
@@ -405,7 +455,7 @@ namespace Duke
  
         private void btnDukeOpen_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists(txtDukePath.Text)) Process.Start(@txtDukePath.Text);
+            if (Directory.Exists(txtGamePath.Text)) Process.Start(txtGamePath.Text);
         }
 
         private void btnDosBoxOpen_Click(object sender, EventArgs e)
@@ -413,10 +463,23 @@ namespace Duke
             if (Directory.Exists(txtDosBoxPath.Text)) Process.Start(@txtDosBoxPath.Text);
         }
 
+        private void btnDosBoxCaptureOpen_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(txtDosBoxCapturePath.Text)) Process.Start(@txtDosBoxCapturePath.Text);
+        }
+
         private void btnSharedOpen_Click(object sender, EventArgs e)
         {
             if (Directory.Exists(txtSharedConfig.Text)) Process.Start(@txtSharedConfig.Text);
         }
+
+        private void comboGame_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboChanged();
+        }
+
+
+
 
     }
 }

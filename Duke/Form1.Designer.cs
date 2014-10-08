@@ -40,9 +40,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.btnLaunch = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.txtDukePath = new System.Windows.Forms.TextBox();
+            this.txtGamePath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnDukePath = new System.Windows.Forms.Button();
+            this.btnGamePath = new System.Windows.Forms.Button();
             this.txtDosBoxPath = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.btnDosBoxPath = new System.Windows.Forms.Button();
@@ -60,9 +60,14 @@
             this.btnUploadMap = new System.Windows.Forms.Button();
             this.btnDownloadMaps = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
-            this.btnDukeOpen = new System.Windows.Forms.Button();
+            this.btnGameOpen = new System.Windows.Forms.Button();
             this.btnDosBoxOpen = new System.Windows.Forms.Button();
             this.btnSharedOpen = new System.Windows.Forms.Button();
+            this.comboGame = new System.Windows.Forms.ComboBox();
+            this.btnDosBoxCaptureOpen = new System.Windows.Forms.Button();
+            this.btnDosBoxCapturePath = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtDosBoxCapturePath = new System.Windows.Forms.TextBox();
             this.lstIp = new Duke.VisualStylesListView();
             this.clmIp = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clmAdapter = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -81,7 +86,7 @@
             this.btnLaunch.Name = "btnLaunch";
             this.btnLaunch.Size = new System.Drawing.Size(125, 96);
             this.btnLaunch.TabIndex = 0;
-            this.btnLaunch.Text = "Launch\r\nDuke!";
+            this.btnLaunch.Text = "Launch!";
             this.btnLaunch.UseMnemonic = false;
             this.btnLaunch.UseVisualStyleBackColor = false;
             this.btnLaunch.Click += new System.EventHandler(this.btnLaunch_Click);
@@ -99,41 +104,41 @@
             this.textBox1.Size = new System.Drawing.Size(493, 190);
             this.textBox1.TabIndex = 3;
             // 
-            // txtDukePath
+            // txtGamePath
             // 
-            this.txtDukePath.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtDukePath.Location = new System.Drawing.Point(129, 519);
-            this.txtDukePath.Name = "txtDukePath";
-            this.txtDukePath.ReadOnly = true;
-            this.txtDukePath.Size = new System.Drawing.Size(368, 20);
-            this.txtDukePath.TabIndex = 7;
+            this.txtGamePath.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txtGamePath.Location = new System.Drawing.Point(137, 519);
+            this.txtGamePath.Name = "txtGamePath";
+            this.txtGamePath.ReadOnly = true;
+            this.txtGamePath.Size = new System.Drawing.Size(360, 20);
+            this.txtGamePath.TabIndex = 7;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 522);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(90, 13);
+            this.label1.Size = new System.Drawing.Size(67, 13);
             this.label1.TabIndex = 8;
-            this.label1.Text = "Path for Duke3D:";
+            this.label1.Text = "Game folder:";
             // 
-            // btnDukePath
+            // btnGamePath
             // 
-            this.btnDukePath.Location = new System.Drawing.Point(510, 517);
-            this.btnDukePath.Name = "btnDukePath";
-            this.btnDukePath.Size = new System.Drawing.Size(90, 23);
-            this.btnDukePath.TabIndex = 9;
-            this.btnDukePath.Text = "Select folder...";
-            this.btnDukePath.UseVisualStyleBackColor = true;
-            this.btnDukePath.Click += new System.EventHandler(this.btnDukePath_Click);
+            this.btnGamePath.Location = new System.Drawing.Point(510, 517);
+            this.btnGamePath.Name = "btnGamePath";
+            this.btnGamePath.Size = new System.Drawing.Size(90, 23);
+            this.btnGamePath.TabIndex = 9;
+            this.btnGamePath.Text = "Select folder...";
+            this.btnGamePath.UseVisualStyleBackColor = true;
+            this.btnGamePath.Click += new System.EventHandler(this.btnDukePath_Click);
             // 
             // txtDosBoxPath
             // 
             this.txtDosBoxPath.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtDosBoxPath.Location = new System.Drawing.Point(129, 552);
+            this.txtDosBoxPath.Location = new System.Drawing.Point(137, 552);
             this.txtDosBoxPath.Name = "txtDosBoxPath";
             this.txtDosBoxPath.ReadOnly = true;
-            this.txtDosBoxPath.Size = new System.Drawing.Size(368, 20);
+            this.txtDosBoxPath.Size = new System.Drawing.Size(360, 20);
             this.txtDosBoxPath.TabIndex = 10;
             // 
             // label2
@@ -141,9 +146,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 555);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(91, 13);
+            this.label2.Size = new System.Drawing.Size(80, 13);
             this.label2.TabIndex = 11;
-            this.label2.Text = "Path for DOSBox:";
+            this.label2.Text = "DOSBox folder:";
             // 
             // btnDosBoxPath
             // 
@@ -158,24 +163,24 @@
             // txtSharedConfig
             // 
             this.txtSharedConfig.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtSharedConfig.Location = new System.Drawing.Point(129, 585);
+            this.txtSharedConfig.Location = new System.Drawing.Point(137, 618);
             this.txtSharedConfig.Name = "txtSharedConfig";
             this.txtSharedConfig.ReadOnly = true;
-            this.txtSharedConfig.Size = new System.Drawing.Size(368, 20);
+            this.txtSharedConfig.Size = new System.Drawing.Size(360, 20);
             this.txtSharedConfig.TabIndex = 13;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 588);
+            this.label3.Location = new System.Drawing.Point(12, 621);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(111, 13);
+            this.label3.Size = new System.Drawing.Size(73, 13);
             this.label3.TabIndex = 14;
-            this.label3.Text = "Path for shared folder:";
+            this.label3.Text = "Shared folder:";
             // 
             // btnSharedConfig
             // 
-            this.btnSharedConfig.Location = new System.Drawing.Point(510, 583);
+            this.btnSharedConfig.Location = new System.Drawing.Point(510, 616);
             this.btnSharedConfig.Name = "btnSharedConfig";
             this.btnSharedConfig.Size = new System.Drawing.Size(90, 23);
             this.btnSharedConfig.TabIndex = 15;
@@ -213,7 +218,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(375, 399);
+            this.label4.Location = new System.Drawing.Point(375, 431);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(68, 13);
             this.label4.TabIndex = 18;
@@ -221,10 +226,10 @@
             // 
             // txtPlayerName
             // 
-            this.txtPlayerName.Location = new System.Drawing.Point(445, 396);
+            this.txtPlayerName.Location = new System.Drawing.Point(449, 428);
             this.txtPlayerName.MaxLength = 10;
             this.txtPlayerName.Name = "txtPlayerName";
-            this.txtPlayerName.Size = new System.Drawing.Size(104, 20);
+            this.txtPlayerName.Size = new System.Drawing.Size(97, 20);
             this.txtPlayerName.TabIndex = 19;
             this.txtPlayerName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtPlayerName_KeyDown);
             // 
@@ -275,15 +280,15 @@
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
-            // btnDukeOpen
+            // btnGameOpen
             // 
-            this.btnDukeOpen.Location = new System.Drawing.Point(609, 517);
-            this.btnDukeOpen.Name = "btnDukeOpen";
-            this.btnDukeOpen.Size = new System.Drawing.Size(75, 23);
-            this.btnDukeOpen.TabIndex = 26;
-            this.btnDukeOpen.Text = "Open folder";
-            this.btnDukeOpen.UseVisualStyleBackColor = true;
-            this.btnDukeOpen.Click += new System.EventHandler(this.btnDukeOpen_Click);
+            this.btnGameOpen.Location = new System.Drawing.Point(609, 517);
+            this.btnGameOpen.Name = "btnGameOpen";
+            this.btnGameOpen.Size = new System.Drawing.Size(75, 23);
+            this.btnGameOpen.TabIndex = 26;
+            this.btnGameOpen.Text = "Open folder";
+            this.btnGameOpen.UseVisualStyleBackColor = true;
+            this.btnGameOpen.Click += new System.EventHandler(this.btnDukeOpen_Click);
             // 
             // btnDosBoxOpen
             // 
@@ -297,13 +302,64 @@
             // 
             // btnSharedOpen
             // 
-            this.btnSharedOpen.Location = new System.Drawing.Point(609, 583);
+            this.btnSharedOpen.Location = new System.Drawing.Point(609, 616);
             this.btnSharedOpen.Name = "btnSharedOpen";
             this.btnSharedOpen.Size = new System.Drawing.Size(75, 23);
             this.btnSharedOpen.TabIndex = 28;
             this.btnSharedOpen.Text = "Open folder";
             this.btnSharedOpen.UseVisualStyleBackColor = true;
             this.btnSharedOpen.Click += new System.EventHandler(this.btnSharedOpen_Click);
+            // 
+            // comboGame
+            // 
+            this.comboGame.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboGame.FormattingEnabled = true;
+            this.comboGame.Items.AddRange(new object[] {
+            "Duke Nukem 3D",
+            "Shadow Warrior"});
+            this.comboGame.Location = new System.Drawing.Point(378, 395);
+            this.comboGame.Name = "comboGame";
+            this.comboGame.Size = new System.Drawing.Size(168, 21);
+            this.comboGame.TabIndex = 29;
+            this.comboGame.SelectedIndexChanged += new System.EventHandler(this.comboGame_SelectedIndexChanged);
+            // 
+            // btnDosBoxCaptureOpen
+            // 
+            this.btnDosBoxCaptureOpen.Location = new System.Drawing.Point(609, 583);
+            this.btnDosBoxCaptureOpen.Name = "btnDosBoxCaptureOpen";
+            this.btnDosBoxCaptureOpen.Size = new System.Drawing.Size(75, 23);
+            this.btnDosBoxCaptureOpen.TabIndex = 33;
+            this.btnDosBoxCaptureOpen.Text = "Open folder";
+            this.btnDosBoxCaptureOpen.UseVisualStyleBackColor = true;
+            this.btnDosBoxCaptureOpen.Click += new System.EventHandler(this.btnDosBoxCaptureOpen_Click);
+            // 
+            // btnDosBoxCapturePath
+            // 
+            this.btnDosBoxCapturePath.Location = new System.Drawing.Point(510, 583);
+            this.btnDosBoxCapturePath.Name = "btnDosBoxCapturePath";
+            this.btnDosBoxCapturePath.Size = new System.Drawing.Size(90, 23);
+            this.btnDosBoxCapturePath.TabIndex = 32;
+            this.btnDosBoxCapturePath.Text = "Select folder...";
+            this.btnDosBoxCapturePath.UseVisualStyleBackColor = true;
+            this.btnDosBoxCapturePath.Click += new System.EventHandler(this.btnDosBoxCapturePath_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 588);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(119, 13);
+            this.label5.TabIndex = 31;
+            this.label5.Text = "DOSBox capture folder:";
+            // 
+            // txtDosBoxCapturePath
+            // 
+            this.txtDosBoxCapturePath.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txtDosBoxCapturePath.Location = new System.Drawing.Point(137, 585);
+            this.txtDosBoxCapturePath.Name = "txtDosBoxCapturePath";
+            this.txtDosBoxCapturePath.ReadOnly = true;
+            this.txtDosBoxCapturePath.Size = new System.Drawing.Size(360, 20);
+            this.txtDosBoxCapturePath.TabIndex = 30;
             // 
             // lstIp
             // 
@@ -378,10 +434,15 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(697, 618);
+            this.ClientSize = new System.Drawing.Size(697, 650);
+            this.Controls.Add(this.btnDosBoxCaptureOpen);
+            this.Controls.Add(this.btnDosBoxCapturePath);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.txtDosBoxCapturePath);
+            this.Controls.Add(this.comboGame);
             this.Controls.Add(this.btnSharedOpen);
             this.Controls.Add(this.btnDosBoxOpen);
-            this.Controls.Add(this.btnDukeOpen);
+            this.Controls.Add(this.btnGameOpen);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnDownloadMaps);
             this.Controls.Add(this.btnUploadMap);
@@ -396,9 +457,9 @@
             this.Controls.Add(this.btnDosBoxPath);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtDosBoxPath);
-            this.Controls.Add(this.btnDukePath);
+            this.Controls.Add(this.btnGamePath);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtDukePath);
+            this.Controls.Add(this.txtGamePath);
             this.Controls.Add(this.lstIp);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.lstPlayers);
@@ -429,9 +490,9 @@
         private VisualStylesListView lstIp;
         private System.Windows.Forms.ColumnHeader clmIp;
         private System.Windows.Forms.ColumnHeader clmAdapter;
-        private System.Windows.Forms.TextBox txtDukePath;
+        private System.Windows.Forms.TextBox txtGamePath;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnDukePath;
+        private System.Windows.Forms.Button btnGamePath;
         private System.Windows.Forms.TextBox txtDosBoxPath;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnDosBoxPath;
@@ -449,9 +510,14 @@
         private System.Windows.Forms.Button btnUploadMap;
         private System.Windows.Forms.Button btnDownloadMaps;
         private System.Windows.Forms.Button btnUpdate;
-        private System.Windows.Forms.Button btnDukeOpen;
+        private System.Windows.Forms.Button btnGameOpen;
         private System.Windows.Forms.Button btnDosBoxOpen;
         private System.Windows.Forms.Button btnSharedOpen;
+        private System.Windows.Forms.ComboBox comboGame;
+        private System.Windows.Forms.Button btnDosBoxCaptureOpen;
+        private System.Windows.Forms.Button btnDosBoxCapturePath;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtDosBoxCapturePath;
     }
 }
 
