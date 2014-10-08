@@ -42,11 +42,11 @@ namespace Updater
             if (File.Exists(exeShared) && File.Exists(exeLocal))
             {
                 var versionInfoShared = FileVersionInfo.GetVersionInfo(exeShared);
-                string versionSharedString = versionInfoShared.ProductVersion.Substring(0, 3);
+                string versionSharedString = versionInfoShared.ProductVersion;
                 int versionShared = Convert.ToInt32(versionInfoShared.ProductVersion.Replace(".", ""));
 
                 var versionInfoLocal = FileVersionInfo.GetVersionInfo(exeLocal);
-                string versionLocalString = versionInfoLocal.ProductVersion.Substring(0, 3);
+                string versionLocalString = versionInfoLocal.ProductVersion;
                 int versionLocal = Convert.ToInt32(versionInfoLocal.ProductVersion.Replace(".", ""));
 
                 if (versionShared > versionLocal)
@@ -61,7 +61,7 @@ namespace Updater
             else if (File.Exists(exeLocal))
             {
                 var versionInfoLocal = FileVersionInfo.GetVersionInfo(exeLocal);
-                string versionLocalString = versionInfoLocal.ProductVersion.Substring(0, 3);
+                string versionLocalString = versionInfoLocal.ProductVersion;
                 int versionLocal = Convert.ToInt32(versionInfoLocal.ProductVersion.Replace(".", ""));
 
                 label1.Text = "You are using the latest version.\r\n(v" + versionLocalString + ")";

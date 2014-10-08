@@ -57,8 +57,6 @@
             this.txtPlayerName = new System.Windows.Forms.TextBox();
             this.timer3 = new System.Windows.Forms.Timer(this.components);
             this.picMapImage = new System.Windows.Forms.PictureBox();
-            this.btnUploadMap = new System.Windows.Forms.Button();
-            this.btnDownloadMaps = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnGameOpen = new System.Windows.Forms.Button();
             this.btnDosBoxOpen = new System.Windows.Forms.Button();
@@ -68,6 +66,11 @@
             this.btnDosBoxCapturePath = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.txtDosBoxCapturePath = new System.Windows.Forms.TextBox();
+            this.btnDeleteMaps = new System.Windows.Forms.Button();
+            this.btnSaveDescription = new System.Windows.Forms.Button();
+            this.txtDescription = new System.Windows.Forms.TextBox();
+            this.txtLastPlayed = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.lstIp = new Duke.VisualStylesListView();
             this.clmIp = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clmAdapter = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -82,9 +85,9 @@
             // 
             this.btnLaunch.BackColor = System.Drawing.Color.Transparent;
             this.btnLaunch.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLaunch.Location = new System.Drawing.Point(559, 394);
+            this.btnLaunch.Location = new System.Drawing.Point(550, 395);
             this.btnLaunch.Name = "btnLaunch";
-            this.btnLaunch.Size = new System.Drawing.Size(125, 96);
+            this.btnLaunch.Size = new System.Drawing.Size(134, 93);
             this.btnLaunch.TabIndex = 0;
             this.btnLaunch.Text = "Launch!";
             this.btnLaunch.UseMnemonic = false;
@@ -107,7 +110,7 @@
             // txtGamePath
             // 
             this.txtGamePath.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtGamePath.Location = new System.Drawing.Point(137, 519);
+            this.txtGamePath.Location = new System.Drawing.Point(137, 554);
             this.txtGamePath.Name = "txtGamePath";
             this.txtGamePath.ReadOnly = true;
             this.txtGamePath.Size = new System.Drawing.Size(360, 20);
@@ -116,7 +119,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 522);
+            this.label1.Location = new System.Drawing.Point(12, 563);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(67, 13);
             this.label1.TabIndex = 8;
@@ -124,7 +127,7 @@
             // 
             // btnGamePath
             // 
-            this.btnGamePath.Location = new System.Drawing.Point(510, 517);
+            this.btnGamePath.Location = new System.Drawing.Point(510, 552);
             this.btnGamePath.Name = "btnGamePath";
             this.btnGamePath.Size = new System.Drawing.Size(90, 23);
             this.btnGamePath.TabIndex = 9;
@@ -135,7 +138,7 @@
             // txtDosBoxPath
             // 
             this.txtDosBoxPath.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtDosBoxPath.Location = new System.Drawing.Point(137, 552);
+            this.txtDosBoxPath.Location = new System.Drawing.Point(137, 587);
             this.txtDosBoxPath.Name = "txtDosBoxPath";
             this.txtDosBoxPath.ReadOnly = true;
             this.txtDosBoxPath.Size = new System.Drawing.Size(360, 20);
@@ -144,7 +147,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 555);
+            this.label2.Location = new System.Drawing.Point(12, 590);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(80, 13);
             this.label2.TabIndex = 11;
@@ -152,7 +155,7 @@
             // 
             // btnDosBoxPath
             // 
-            this.btnDosBoxPath.Location = new System.Drawing.Point(510, 550);
+            this.btnDosBoxPath.Location = new System.Drawing.Point(510, 585);
             this.btnDosBoxPath.Name = "btnDosBoxPath";
             this.btnDosBoxPath.Size = new System.Drawing.Size(90, 23);
             this.btnDosBoxPath.TabIndex = 12;
@@ -163,7 +166,7 @@
             // txtSharedConfig
             // 
             this.txtSharedConfig.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtSharedConfig.Location = new System.Drawing.Point(137, 618);
+            this.txtSharedConfig.Location = new System.Drawing.Point(137, 653);
             this.txtSharedConfig.Name = "txtSharedConfig";
             this.txtSharedConfig.ReadOnly = true;
             this.txtSharedConfig.Size = new System.Drawing.Size(360, 20);
@@ -172,7 +175,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 621);
+            this.label3.Location = new System.Drawing.Point(12, 656);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(73, 13);
             this.label3.TabIndex = 14;
@@ -180,7 +183,7 @@
             // 
             // btnSharedConfig
             // 
-            this.btnSharedConfig.Location = new System.Drawing.Point(510, 616);
+            this.btnSharedConfig.Location = new System.Drawing.Point(510, 651);
             this.btnSharedConfig.Name = "btnSharedConfig";
             this.btnSharedConfig.Size = new System.Drawing.Size(90, 23);
             this.btnSharedConfig.TabIndex = 15;
@@ -202,7 +205,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.Silver;
-            this.panel1.Location = new System.Drawing.Point(0, 503);
+            this.panel1.Location = new System.Drawing.Point(0, 538);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(697, 1);
             this.panel1.TabIndex = 16;
@@ -210,7 +213,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.panel2.Location = new System.Drawing.Point(0, 504);
+            this.panel2.Location = new System.Drawing.Point(0, 539);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(697, 1);
             this.panel2.TabIndex = 17;
@@ -218,7 +221,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(375, 431);
+            this.label4.Location = new System.Drawing.Point(367, 398);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(68, 13);
             this.label4.TabIndex = 18;
@@ -226,11 +229,12 @@
             // 
             // txtPlayerName
             // 
-            this.txtPlayerName.Location = new System.Drawing.Point(449, 428);
+            this.txtPlayerName.Location = new System.Drawing.Point(439, 395);
             this.txtPlayerName.MaxLength = 10;
             this.txtPlayerName.Name = "txtPlayerName";
-            this.txtPlayerName.Size = new System.Drawing.Size(97, 20);
+            this.txtPlayerName.Size = new System.Drawing.Size(98, 20);
             this.txtPlayerName.TabIndex = 19;
+            this.txtPlayerName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtPlayerName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtPlayerName_KeyDown);
             // 
             // timer3
@@ -241,7 +245,7 @@
             // picMapImage
             // 
             this.picMapImage.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.picMapImage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.picMapImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.picMapImage.Location = new System.Drawing.Point(12, 363);
             this.picMapImage.Name = "picMapImage";
             this.picMapImage.Size = new System.Drawing.Size(167, 127);
@@ -250,31 +254,11 @@
             this.picMapImage.TabStop = false;
             this.picMapImage.DoubleClick += new System.EventHandler(this.picMapImage_DoubleClick);
             // 
-            // btnUploadMap
-            // 
-            this.btnUploadMap.Location = new System.Drawing.Point(191, 394);
-            this.btnUploadMap.Name = "btnUploadMap";
-            this.btnUploadMap.Size = new System.Drawing.Size(174, 28);
-            this.btnUploadMap.TabIndex = 21;
-            this.btnUploadMap.Text = "Upload selected maps";
-            this.btnUploadMap.UseVisualStyleBackColor = true;
-            this.btnUploadMap.Click += new System.EventHandler(this.btnUploadMap_Click);
-            // 
-            // btnDownloadMaps
-            // 
-            this.btnDownloadMaps.Location = new System.Drawing.Point(191, 428);
-            this.btnDownloadMaps.Name = "btnDownloadMaps";
-            this.btnDownloadMaps.Size = new System.Drawing.Size(174, 28);
-            this.btnDownloadMaps.TabIndex = 23;
-            this.btnDownloadMaps.Text = "Download new maps";
-            this.btnDownloadMaps.UseVisualStyleBackColor = true;
-            this.btnDownloadMaps.Click += new System.EventHandler(this.btnDownloadMaps_Click);
-            // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(191, 462);
+            this.btnUpdate.Location = new System.Drawing.Point(370, 501);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(174, 28);
+            this.btnUpdate.Size = new System.Drawing.Size(167, 23);
             this.btnUpdate.TabIndex = 25;
             this.btnUpdate.Text = "Check for program update";
             this.btnUpdate.UseVisualStyleBackColor = true;
@@ -282,7 +266,7 @@
             // 
             // btnGameOpen
             // 
-            this.btnGameOpen.Location = new System.Drawing.Point(609, 517);
+            this.btnGameOpen.Location = new System.Drawing.Point(609, 552);
             this.btnGameOpen.Name = "btnGameOpen";
             this.btnGameOpen.Size = new System.Drawing.Size(75, 23);
             this.btnGameOpen.TabIndex = 26;
@@ -292,7 +276,7 @@
             // 
             // btnDosBoxOpen
             // 
-            this.btnDosBoxOpen.Location = new System.Drawing.Point(609, 550);
+            this.btnDosBoxOpen.Location = new System.Drawing.Point(609, 585);
             this.btnDosBoxOpen.Name = "btnDosBoxOpen";
             this.btnDosBoxOpen.Size = new System.Drawing.Size(75, 23);
             this.btnDosBoxOpen.TabIndex = 27;
@@ -302,7 +286,7 @@
             // 
             // btnSharedOpen
             // 
-            this.btnSharedOpen.Location = new System.Drawing.Point(609, 616);
+            this.btnSharedOpen.Location = new System.Drawing.Point(609, 651);
             this.btnSharedOpen.Name = "btnSharedOpen";
             this.btnSharedOpen.Size = new System.Drawing.Size(75, 23);
             this.btnSharedOpen.TabIndex = 28;
@@ -317,15 +301,15 @@
             this.comboGame.Items.AddRange(new object[] {
             "Duke Nukem 3D",
             "Shadow Warrior"});
-            this.comboGame.Location = new System.Drawing.Point(378, 395);
+            this.comboGame.Location = new System.Drawing.Point(551, 502);
             this.comboGame.Name = "comboGame";
-            this.comboGame.Size = new System.Drawing.Size(168, 21);
+            this.comboGame.Size = new System.Drawing.Size(132, 21);
             this.comboGame.TabIndex = 29;
             this.comboGame.SelectedIndexChanged += new System.EventHandler(this.comboGame_SelectedIndexChanged);
             // 
             // btnDosBoxCaptureOpen
             // 
-            this.btnDosBoxCaptureOpen.Location = new System.Drawing.Point(609, 583);
+            this.btnDosBoxCaptureOpen.Location = new System.Drawing.Point(609, 618);
             this.btnDosBoxCaptureOpen.Name = "btnDosBoxCaptureOpen";
             this.btnDosBoxCaptureOpen.Size = new System.Drawing.Size(75, 23);
             this.btnDosBoxCaptureOpen.TabIndex = 33;
@@ -335,7 +319,7 @@
             // 
             // btnDosBoxCapturePath
             // 
-            this.btnDosBoxCapturePath.Location = new System.Drawing.Point(510, 583);
+            this.btnDosBoxCapturePath.Location = new System.Drawing.Point(510, 618);
             this.btnDosBoxCapturePath.Name = "btnDosBoxCapturePath";
             this.btnDosBoxCapturePath.Size = new System.Drawing.Size(90, 23);
             this.btnDosBoxCapturePath.TabIndex = 32;
@@ -346,7 +330,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 588);
+            this.label5.Location = new System.Drawing.Point(12, 623);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(119, 13);
             this.label5.TabIndex = 31;
@@ -355,11 +339,60 @@
             // txtDosBoxCapturePath
             // 
             this.txtDosBoxCapturePath.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtDosBoxCapturePath.Location = new System.Drawing.Point(137, 585);
+            this.txtDosBoxCapturePath.Location = new System.Drawing.Point(137, 620);
             this.txtDosBoxCapturePath.Name = "txtDosBoxCapturePath";
             this.txtDosBoxCapturePath.ReadOnly = true;
             this.txtDosBoxCapturePath.Size = new System.Drawing.Size(360, 20);
             this.txtDosBoxCapturePath.TabIndex = 30;
+            // 
+            // btnDeleteMaps
+            // 
+            this.btnDeleteMaps.Location = new System.Drawing.Point(12, 501);
+            this.btnDeleteMaps.Name = "btnDeleteMaps";
+            this.btnDeleteMaps.Size = new System.Drawing.Size(167, 23);
+            this.btnDeleteMaps.TabIndex = 34;
+            this.btnDeleteMaps.Text = "Delete selected maps";
+            this.btnDeleteMaps.UseVisualStyleBackColor = true;
+            this.btnDeleteMaps.Click += new System.EventHandler(this.btnDeleteMaps_Click);
+            // 
+            // btnSaveDescription
+            // 
+            this.btnSaveDescription.Location = new System.Drawing.Point(191, 501);
+            this.btnSaveDescription.Name = "btnSaveDescription";
+            this.btnSaveDescription.Size = new System.Drawing.Size(167, 23);
+            this.btnSaveDescription.TabIndex = 35;
+            this.btnSaveDescription.Text = "Save map description";
+            this.btnSaveDescription.UseVisualStyleBackColor = true;
+            this.btnSaveDescription.Click += new System.EventHandler(this.btnSaveDescription_Click);
+            // 
+            // txtDescription
+            // 
+            this.txtDescription.Location = new System.Drawing.Point(191, 427);
+            this.txtDescription.Multiline = true;
+            this.txtDescription.Name = "txtDescription";
+            this.txtDescription.Size = new System.Drawing.Size(167, 63);
+            this.txtDescription.TabIndex = 36;
+            this.txtDescription.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // txtLastPlayed
+            // 
+            this.txtLastPlayed.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txtLastPlayed.Location = new System.Drawing.Point(257, 395);
+            this.txtLastPlayed.MaxLength = 10;
+            this.txtLastPlayed.Name = "txtLastPlayed";
+            this.txtLastPlayed.ReadOnly = true;
+            this.txtLastPlayed.Size = new System.Drawing.Size(101, 20);
+            this.txtLastPlayed.TabIndex = 38;
+            this.txtLastPlayed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(190, 398);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(64, 13);
+            this.label6.TabIndex = 39;
+            this.label6.Text = "Last played:";
             // 
             // lstIp
             // 
@@ -419,7 +452,7 @@
             this.lstMaps.FullRowSelect = true;
             this.lstMaps.Location = new System.Drawing.Point(12, 14);
             this.lstMaps.Name = "lstMaps";
-            this.lstMaps.Size = new System.Drawing.Size(167, 336);
+            this.lstMaps.Size = new System.Drawing.Size(167, 335);
             this.lstMaps.TabIndex = 1;
             this.lstMaps.UseCompatibleStateImageBehavior = false;
             this.lstMaps.View = System.Windows.Forms.View.Details;
@@ -434,7 +467,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(697, 650);
+            this.ClientSize = new System.Drawing.Size(697, 687);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.txtLastPlayed);
+            this.Controls.Add(this.txtDescription);
+            this.Controls.Add(this.btnSaveDescription);
+            this.Controls.Add(this.btnDeleteMaps);
             this.Controls.Add(this.btnDosBoxCaptureOpen);
             this.Controls.Add(this.btnDosBoxCapturePath);
             this.Controls.Add(this.label5);
@@ -444,8 +482,6 @@
             this.Controls.Add(this.btnDosBoxOpen);
             this.Controls.Add(this.btnGameOpen);
             this.Controls.Add(this.btnUpdate);
-            this.Controls.Add(this.btnDownloadMaps);
-            this.Controls.Add(this.btnUploadMap);
             this.Controls.Add(this.picMapImage);
             this.Controls.Add(this.txtPlayerName);
             this.Controls.Add(this.label4);
@@ -507,8 +543,6 @@
         private System.Windows.Forms.TextBox txtPlayerName;
         private System.Windows.Forms.Timer timer3;
         private System.Windows.Forms.PictureBox picMapImage;
-        private System.Windows.Forms.Button btnUploadMap;
-        private System.Windows.Forms.Button btnDownloadMaps;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnGameOpen;
         private System.Windows.Forms.Button btnDosBoxOpen;
@@ -518,6 +552,11 @@
         private System.Windows.Forms.Button btnDosBoxCapturePath;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtDosBoxCapturePath;
+        private System.Windows.Forms.Button btnDeleteMaps;
+        private System.Windows.Forms.Button btnSaveDescription;
+        private System.Windows.Forms.TextBox txtDescription;
+        private System.Windows.Forms.TextBox txtLastPlayed;
+        private System.Windows.Forms.Label label6;
     }
 }
 

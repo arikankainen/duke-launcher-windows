@@ -18,7 +18,7 @@ namespace Duke
 {
     public partial class Form1 : Form, IMessageFilter
     {
-        private string appName = "Duke Launcher v1.2";
+        private string appName = "Duke Launcher v" + Application.ProductVersion;
 
         private string appPath;
         private string appDir;
@@ -47,6 +47,8 @@ namespace Duke
         private bool client = false;
         private string timeOld;
 
+        private bool copied = false;
+
         private string comboGameOld;
 
         private string playersSelected, mapSelected, ipSelected;
@@ -74,7 +76,7 @@ namespace Duke
 
             updatePaths();
             reselectGame();
-
+            
             listIp();
             resizeColumns();
 
@@ -158,6 +160,8 @@ namespace Duke
                                 addLine("Player \"" + name + "\" started server (" + ip + ").");
                                 addLine("Game \"" + game + "\" (" + players + " players).");
                                 addLine("Map \"" + map + "\"");
+                                addLine("");
+                                addLine("Waiting for server to get ready.");
 
                                 lastMapPlayed = map;
 
@@ -187,10 +191,12 @@ namespace Duke
                     timer3.Stop();
 
                     addLine("");
-                    addLine("Launching game...");
+                    addLine("Game started.");
 
                     modifyPlayers(Convert.ToInt32(players));
                     modifyName(txtPlayerName.Text);
+
+                    copyMap();
 
                     using (StreamWriter writer = File.CreateText(batGame))
                     {
@@ -219,7 +225,7 @@ namespace Duke
             if (process.HasExited)
             {
                 onceMinimized = false;
-                this.WindowState = FormWindowState.Normal;
+                //this.WindowState = FormWindowState.Normal;
                 timer2.Stop();
 
                 addLine("");
@@ -229,10 +235,12 @@ namespace Duke
 
                 enableAll();
                 if (server) deleteSharedConfig();
+                if (copied) delMap();
                 server = false;
                 client = false;
 
                 saveCapture();
+                loadLastPlayed();
                 
                 timer1.Start();
             }
@@ -241,7 +249,7 @@ namespace Duke
                 if (!onceMinimized)
                 {
                     onceMinimized = true;
-                    this.WindowState = FormWindowState.Minimized;
+                    //this.WindowState = FormWindowState.Minimized;
                 }
             }
         }
@@ -260,13 +268,16 @@ namespace Duke
 
                 addLine("");
                 addLine("Server started.");
-                addLine("Launching game...");
+                addLine("Game started.");
 
                 int tries = 0;
                 do
                 {
                     tries++;
                 } while (createSharedConfig() == false || tries < 50);
+
+                copyMap();
+                saveLastPlayed();
 
                 modifyPlayers(Convert.ToInt32(lstPlayers.SelectedItems[0].Text));
                 modifyName(txtPlayerName.Text);
@@ -304,7 +315,7 @@ namespace Duke
             DialogResult result = folder.ShowDialog();
             if (folder.SelectedPath != "") txtGamePath.Text = folder.SelectedPath;
             updatePaths();
-            if (Directory.Exists(pathGame)) readMaps();
+            readMaps();
             resizeColumns();
             resizeColumns();
 
@@ -380,7 +391,7 @@ namespace Duke
         {
             if (lstMaps.SelectedItems.Count > 0)
             {
-                string mapImage = Path.Combine(pathGame, Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text)) + ".png";
+                string mapImage = Path.Combine(Path.Combine(pathShared, comboGame.Text), Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text)) + ".PNG";
                 if (File.Exists(mapImage))
                 {
                     FileStream fs;
@@ -391,55 +402,14 @@ namespace Duke
                 else picMapImage.Image = null;
             }
             else picMapImage.Image = null;
-        }
 
-        private void btnUploadMap_Click(object sender, EventArgs e)
-        {
-            if (Directory.Exists(Path.Combine(pathShared, comboGame.Text)) &&
-                Directory.Exists(pathGame))
-            {
-                addLine("");
-                if (lstMaps.SelectedItems.Count > 0)
-                {
-                    foreach (ListViewItem map in lstMaps.SelectedItems)
-                    {
-                        string mapFileSource = Path.Combine(pathGame, map.Text);
-                        string mapFileDestination = Path.Combine(Path.Combine(pathShared, comboGame.Text), map.Text);
-
-                        string mapImageSource = Path.Combine(pathGame, Path.GetFileNameWithoutExtension(map.Text)) + ".PNG";
-                        string mapImageDestination = Path.Combine(Path.Combine(pathShared, comboGame.Text), Path.GetFileNameWithoutExtension(map.Text)) + ".PNG";
-
-                        if (File.Exists(mapFileSource) && Directory.Exists(Path.Combine(pathShared, comboGame.Text)))
-                        {
-                            if (File.Exists(mapFileDestination)) File.Delete(mapFileDestination);
-                            File.Copy(mapFileSource, mapFileDestination);
-                            addLine("Map \"" + map.Text + "\" uploaded.");
-
-                            if (File.Exists(mapImageSource))
-                            {
-                                if (File.Exists(mapImageDestination)) File.Delete(mapImageDestination);
-                                File.Copy(mapImageSource, mapImageDestination);
-                                string filenameImage = Path.GetFileNameWithoutExtension(map.Text) + ".PNG";
-                                addLine("Image \"" + filenameImage + "\" uploaded.");
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    addLine("No maps selected.");
-                }
-            }
-        }
-
-        private void btnDownloadMaps_Click(object sender, EventArgs e)
-        {
-            downloadNewMaps(true);
+            loadDescription();
+            loadLastPlayed();
         }
 
         private void picMapImage_DoubleClick(object sender, EventArgs e)
         {
-            string mapImage = Path.Combine(pathGame, Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text)) + ".PNG";
+            string mapImage = Path.Combine(Path.Combine(pathShared, comboGame.Text), Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text)) + ".PNG";
             if (File.Exists(mapImage)) Process.Start(@mapImage);
         }
 
@@ -476,6 +446,26 @@ namespace Duke
         private void comboGame_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboChanged();
+        }
+
+        private void btnDeleteMaps_Click(object sender, EventArgs e)
+        {
+            if (lstMaps.SelectedItems.Count > 0)
+            {
+                var result = MessageBox.Show("Are you sure you want to delete selected maps?", "Confirm map deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk);
+                if (result == DialogResult.Yes) deleteMaps();
+            }
+
+            else
+            {
+                addLine("");
+                addLine("No maps selected.");
+            }
+        }
+
+        private void btnSaveDescription_Click(object sender, EventArgs e)
+        {
+            saveDescription();
         }
 
 

@@ -94,6 +94,7 @@ namespace Duke
             reselectGame();
             updatePaths();
             selectItems();
+            resizeColumns();
         }
 
         private void updatePaths()
@@ -136,16 +137,17 @@ namespace Duke
                 if (File.Exists(exeShared) && File.Exists(exeLocal))
                 {
                     var versionInfoShared = FileVersionInfo.GetVersionInfo(exeShared);
-                    string versionSharedString = versionInfoShared.ProductVersion.Substring(0, 3);
+                    string versionSharedString = versionInfoShared.ProductVersion;
                     int versionShared = Convert.ToInt32(versionInfoShared.ProductVersion.Replace(".", ""));
 
                     var versionInfoLocal = FileVersionInfo.GetVersionInfo(exeLocal);
-                    string versionLocalString = versionInfoLocal.ProductVersion.Substring(0, 3);
+                    string versionLocalString = versionInfoLocal.ProductVersion;
                     int versionLocal = Convert.ToInt32(versionInfoLocal.ProductVersion.Replace(".", ""));
 
                     if (versionShared > versionLocal)
                     {
-                        addLine("Program update available. Get it now!");
+                        addLine("");
+                        addLine("***** Program update available! (v" + versionSharedString + ") *****");
                     }
                 }
             }
@@ -153,16 +155,21 @@ namespace Duke
 
         private void readMaps()
         {
-            string[] mapList = Directory.GetFiles(pathGame, "*.map", SearchOption.TopDirectoryOnly);
+            string mapDir = Path.Combine(pathShared, comboGame.Text);
 
-            lstMaps.BeginUpdate();
-            lstMaps.Items.Clear();
-
-            foreach (string map in mapList)
+            if (Directory.Exists(mapDir))
             {
-                lstMaps.Items.Add(Path.GetFileName(map).ToUpper());
+                string[] mapList = Directory.GetFiles(mapDir, "*.map", SearchOption.TopDirectoryOnly);
+
+                lstMaps.BeginUpdate();
+                lstMaps.Items.Clear();
+
+                foreach (string map in mapList)
+                {
+                    lstMaps.Items.Add(Path.GetFileName(map).ToUpper());
+                }
+                lstMaps.EndUpdate();
             }
-            lstMaps.EndUpdate();
         }
 
         private void modifyPlayers(int num)
@@ -321,8 +328,6 @@ namespace Duke
             btnDosBoxPath.Enabled = false;
             btnGamePath.Enabled = false;
             btnSharedConfig.Enabled = false;
-            btnUploadMap.Enabled = false;
-            btnDownloadMaps.Enabled = false;
             btnUpdate.Enabled = false;
             comboGame.Enabled = false;
             btnDosBoxOpen.Enabled = false;
@@ -330,6 +335,12 @@ namespace Duke
             btnSharedOpen.Enabled = false;
             txtDosBoxCapturePath.Enabled = false;
             btnDosBoxCaptureOpen.Enabled = false;
+            btnDosBoxCapturePath.Enabled = false;
+            btnDeleteMaps.Enabled = false;
+            btnSaveDescription.Enabled = false;
+            txtDescription.Enabled = false;
+            txtLastPlayed.Enabled = false;
+            picMapImage.Enabled = false;
         }
 
         private void enableAll()
@@ -345,8 +356,6 @@ namespace Duke
             btnDosBoxPath.Enabled = true;
             btnGamePath.Enabled = true;
             btnSharedConfig.Enabled = true;
-            btnUploadMap.Enabled = true;
-            btnDownloadMaps.Enabled = true;
             btnUpdate.Enabled = true;
             comboGame.Enabled = true;
             btnDosBoxOpen.Enabled = true;
@@ -354,6 +363,12 @@ namespace Duke
             btnSharedOpen.Enabled = true;
             txtDosBoxCapturePath.Enabled = true;
             btnDosBoxCaptureOpen.Enabled = true;
+            btnDosBoxCapturePath.Enabled = true;
+            btnDeleteMaps.Enabled = true;
+            btnSaveDescription.Enabled = true;
+            txtDescription.Enabled = true;
+            txtLastPlayed.Enabled = true;
+            picMapImage.Enabled = true;
         }
 
         private void centerForm()
@@ -362,111 +377,6 @@ namespace Duke
             this.WindowState = FormWindowState.Normal;
             this.Top = screen.WorkingArea.Top + ((screen.WorkingArea.Height / 2) - (this.Height / 2));
             this.Left = screen.WorkingArea.Left + ((screen.WorkingArea.Width / 2) - (this.Width / 2));
-        }
-
-        private void downloadNewMaps(bool showAllMessages)
-        {
-            if (Directory.Exists(Path.Combine(pathShared, comboGame.Text)) &&
-                Directory.Exists(pathGame))
-            {
-                string[] fileList = Directory.GetFiles(Path.Combine(pathShared, comboGame.Text), "*.map", SearchOption.TopDirectoryOnly);
-                bool found = false;
-                if (showAllMessages)
-                {
-                    addLine("");
-                    addLine("Checking new maps...");
-                }
-
-                if (fileList.Count() > 0)
-                {
-                    int i = 0;
-                    foreach (string file in fileList)
-                    {
-                        if (file == cfgShared) continue;
-
-                        i++;
-                        string filename = Path.GetFileName(file);
-                        string filenameImage = Path.GetFileNameWithoutExtension(file) + ".PNG";
-
-                        string mapFileSource = file;
-                        string mapFileDestination = Path.Combine(pathGame, filename);
-
-                        DateTime mapFileSourceTime = DateTime.MinValue;
-                        DateTime mapFileDestinationTime = DateTime.MinValue;
-
-                        if (File.Exists(mapFileSource)) mapFileSourceTime = File.GetLastWriteTime(mapFileSource);
-                        if (File.Exists(mapFileDestination)) mapFileDestinationTime = File.GetLastWriteTime(mapFileDestination);
-
-                        string mapImageSource = Path.Combine(Path.Combine(pathShared, comboGame.Text), Path.GetFileNameWithoutExtension(filename)) + ".PNG";
-                        string mapImageDestination = Path.Combine(pathGame, Path.GetFileNameWithoutExtension(filename)) + ".PNG";
-
-                        DateTime mapImageSourceTime = DateTime.MinValue;
-                        DateTime mapImageDestinationTime = DateTime.MinValue;
-
-                        if (File.Exists(mapImageSource)) mapImageSourceTime = File.GetLastWriteTime(mapImageSource);
-                        if (File.Exists(mapImageDestination)) mapImageDestinationTime = File.GetLastWriteTime(mapImageDestination);
-
-                        if (File.Exists(mapFileSource) && Directory.Exists(pathGame))
-                        {
-                            if (File.Exists(mapFileDestination))
-                            {
-                                if (mapFileSourceTime != mapFileDestinationTime)
-                                {
-                                    File.Delete(mapFileDestination);
-                                    File.Copy(mapFileSource, mapFileDestination);
-                                    addLine("Map \"" + filename + "\" downloaded.");
-                                    found = true;
-                                }
-                            }
-                            else
-                            {
-                                File.Copy(mapFileSource, mapFileDestination);
-                                addLine("Map \"" + filename + "\" downloaded.");
-                                found = true;
-                            }
-
-                            if (File.Exists(mapImageSource))
-                            {
-                                if (File.Exists(mapImageDestination))
-                                {
-                                    if (mapImageSourceTime != mapImageDestinationTime)
-                                    {
-                                        File.Delete(mapImageDestination);
-                                        File.Copy(mapImageSource, mapImageDestination);
-                                        addLine("Image \"" + filenameImage + "\" downloaded.");
-                                        found = true;
-                                    }
-                                }
-                                else
-                                {
-                                    File.Copy(mapImageSource, mapImageDestination);
-                                    addLine("Image \"" + filenameImage + "\" downloaded.");
-                                    found = true;
-                                }
-                            }
-                        }
-
-
-                    }
-                    string currentMap = "";
-                    if (lstMaps.SelectedItems.Count > 0) currentMap = lstMaps.SelectedItems[0].Text;
-                    readMaps();
-                    picMapImage.Image = null;
-
-                    foreach (ListViewItem map in lstMaps.Items)
-                    {
-                        if (map.Text == currentMap)
-                        {
-                            map.Selected = true;
-                            lstMaps.EnsureVisible(lstMaps.SelectedItems[0].Index);
-                        }
-                    }
-                }
-                if (!found)
-                {
-                    if (showAllMessages) addLine("No new maps found.");
-                }
-            }
         }
 
         private void saveCapture()
@@ -486,14 +396,16 @@ namespace Duke
 
                     try
                     {
-                        if (File.Exists(Path.Combine(pathGame, mapImage))) File.Delete(Path.Combine(pathGame, mapImage));
-                        File.Copy(captureFile, Path.Combine(pathGame, mapImage));
+                        string mapImageFullPath = Path.Combine(Path.Combine(pathShared, comboGame.Text), mapImage);
+                        
+                        if (File.Exists(mapImageFullPath)) File.Delete(mapImageFullPath);
+                        File.Copy(captureFile, mapImageFullPath);
                         addLine("Screen capture saved to \"" + mapImage + "\"");
 
-                        if (File.Exists(Path.Combine(pathGame, mapImage)))
+                        if (File.Exists(mapImageFullPath))
                         {
                             FileStream fs;
-                            fs = new FileStream(Path.Combine(pathGame, mapImage), FileMode.Open, FileAccess.Read);
+                            fs = new FileStream(mapImageFullPath, FileMode.Open, FileAccess.Read);
                             picMapImage.Image = Image.FromStream(fs);
                             fs.Close();
                         }
@@ -511,7 +423,7 @@ namespace Duke
                         {
                             string filename = Path.GetFileName(file);
                             string destFile = Path.Combine(pathDosBoxCaptureAll, filename);
-                            string fileDate = File.GetLastWriteTime(file).ToString(@"yyyy-MM-dd_hh-mm-ss_");
+                            string fileDate = File.GetLastWriteTime(file).ToString(@"yyyy-MM-dd_HH-mm-ss_");
                             string destFileCustom = Path.Combine(pathDosBoxCaptureAll, fileDate + filename);
 
                             if (File.Exists(destFileCustom)) File.Delete(destFileCustom);
@@ -523,6 +435,173 @@ namespace Duke
                 }
             }
         }
+
+        private void copyMap()
+        {
+            string mapFileSource = Path.Combine(Path.Combine(pathShared, comboGame.Text), Path.GetFileName(lstMaps.SelectedItems[0].Text));
+            string mapFileDestination = Path.Combine(pathGame, Path.GetFileName(lstMaps.SelectedItems[0].Text));
+
+            if (File.Exists(mapFileSource))
+            {
+                if (!File.Exists(mapFileDestination))
+                {
+                    File.Copy(mapFileSource, mapFileDestination);
+                    copied = true;
+                }
+                else copied = false;
+            }
+            else copied = false;
+        }
+
+        private void delMap()
+        {
+            string mapFileDestination = Path.Combine(pathGame, Path.GetFileName(lstMaps.SelectedItems[0].Text));
+
+            if (File.Exists(mapFileDestination))
+            {
+                File.Delete(mapFileDestination);
+            }
+            copied = false;
+        }
+
+        private void deleteMaps()
+        {
+            if (Directory.Exists(Path.Combine(pathShared, comboGame.Text)))
+            {
+                addLine("");
+
+                if (lstMaps.SelectedItems.Count > 0)
+                {
+                    foreach (ListViewItem map in lstMaps.SelectedItems)
+                    {
+                        string mapFile = Path.Combine(Path.Combine(pathShared, comboGame.Text), map.Text);
+                        string mapImage = Path.Combine(Path.Combine(pathShared, comboGame.Text), Path.GetFileNameWithoutExtension(map.Text)) + ".PNG";
+
+                        if (File.Exists(mapFile))
+                        {
+                            File.Delete(mapFile);
+                            addLine("Map \"" + map.Text + "\" deleted.");
+                        }
+
+                        if (File.Exists(mapImage))
+                        {
+                            File.Delete(mapImage);
+                            string filenameImage = Path.GetFileNameWithoutExtension(map.Text) + ".PNG";
+                            addLine("Image \"" + filenameImage + "\" deleted.");
+                        }
+                    }
+                }
+                else
+                {
+                    addLine("No maps selected.");
+                }
+            }
+
+            if (lstMaps.SelectedItems.Count > 0)
+            {
+                if (lstMaps.SelectedItems[0].Index > 0)
+                {
+                    int i = lstMaps.SelectedItems[0].Index;
+                    readMaps();
+                    if (lstMaps.Items.Count > i) lstMaps.Items[i].Selected = true;
+                    else lstMaps.Items[lstMaps.Items.Count - 1].Selected = true;
+                }
+                else
+                {
+                    readMaps();
+                    if (lstMaps.Items.Count > 0) lstMaps.Items[0].Selected = true;
+                }
+                if (lstMaps.SelectedItems.Count > 0) lstMaps.EnsureVisible(lstMaps.SelectedItems[0].Index);
+                resizeColumns();
+            }
+        }
+
+        private void saveDescription()
+        {
+            if (lstMaps.SelectedItems.Count == 1)
+            {
+                string mapName = Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text);
+                string descName = mapName + ".txt";
+                string descFile = Path.Combine(Path.Combine(pathShared, comboGame.Text), descName);
+
+                if (txtDescription.Text.Trim() == "" && File.Exists(descFile))
+                {
+                    File.Delete(descFile);
+                    addLine("");
+                    addLine("Map description for \"" + mapName + ".MAP\" deleted.");
+                }
+                else
+                {
+                    File.WriteAllText(descFile, txtDescription.Text);
+                    addLine("");
+                    addLine("Map description for \"" + mapName + ".MAP\" saved.");
+                }
+                
+            }
+            else
+            {
+                addLine("");
+                addLine("Select one map to save description.");
+            }
+        }
+
+        private void loadDescription()
+        {
+            txtDescription.Text = "";
+
+            if (lstMaps.SelectedItems.Count == 1)
+            {
+                string mapName = Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text);
+                string descName = mapName + ".txt";
+                string descFile = Path.Combine(Path.Combine(pathShared, comboGame.Text), descName);
+
+                if (File.Exists(descFile))
+                {
+                    StringBuilder newFile = new StringBuilder();
+
+                    string[] file = File.ReadAllLines(descFile);
+
+                    foreach (string line in file)
+                    {
+                        newFile.Append(line + "\r\n");
+                    }
+                    txtDescription.Text = newFile.ToString();
+                }
+            }
+        }
+
+        private void saveLastPlayed()
+        {
+            string lastPlayed = DateTime.Now.ToString(@"d.M.yyyy");
+
+            if (lstMaps.SelectedItems.Count == 1)
+            {
+                string mapName = Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text);
+                string lpName = mapName + ".lp";
+                string lpFile = Path.Combine(Path.Combine(pathShared, comboGame.Text), lpName);
+
+                File.WriteAllText(lpFile, lastPlayed);
+            }
+        }
+
+        private void loadLastPlayed()
+        {
+            txtLastPlayed.Text = "Never";
+
+            if (lstMaps.SelectedItems.Count == 1)
+            {
+                string mapName = Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text);
+                string lpName = mapName + ".lp";
+                string lpFile = Path.Combine(Path.Combine(pathShared, comboGame.Text), lpName);
+
+                if (File.Exists(lpFile))
+                {
+                    string[] file = File.ReadAllLines(lpFile);
+                    txtLastPlayed.Text = file[0].ToString();
+                }
+            }
+        }
+
 
 
 
