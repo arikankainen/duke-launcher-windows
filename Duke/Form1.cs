@@ -39,6 +39,8 @@ namespace Duke
 
         private string exeShared;
         private string exeLocal;
+        private string exeSharedUpdater;
+        private string exeLocalUpdater;
 
         private string lastMapPlayed;
 
@@ -46,6 +48,11 @@ namespace Duke
         private bool server = false;
         private bool client = false;
         private string timeOld;
+
+        private string userName;
+        private string userFile;
+
+        private int numOfPlayers;
 
         private bool copied = false;
 
@@ -58,11 +65,15 @@ namespace Duke
 
         private DateTime gameStarted;
 
+        private string[] online;
+        private string[] onlineOld = {""};
+
         public Form1()
         {
             InitializeComponent();
             Application.AddMessageFilter(this);
             centerForm();
+            drawLines();
         }
 
         // ************************************ EVENTS
@@ -70,30 +81,34 @@ namespace Duke
         private void Form1_Shown(object sender, EventArgs e)
         {
             string selectedGame = settings.LoadSetting("SelectedGame");
+            comboPlayers.Text = settings.LoadSetting("Players");
             if (selectedGame == "") selectedGame = "Duke Nukem 3D";
             comboGame.Text = selectedGame;
             comboGameOld = comboGame.Text;
 
             updatePaths();
             reselectGame();
-            
             listIp();
             resizeColumns();
-
             selectItems();
             
             addLine(appName);
-            //downloadNewMaps(false);
             checkUpdate();
             textBox1.Focus();
+
+            File.WriteAllText(userFile, "");
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            timer1.Stop();
+            timer2.Stop();
+            timer3.Stop();
+            timer4.Stop();
+
             if (comboGame.Text == "Duke Nukem 3D")
             {
                 if (txtGamePath.Text != "") settings.SaveSetting("DukeFolder", txtGamePath.Text);
-                if (lstPlayers.SelectedItems.Count > 0) settings.SaveSetting("DukeNumPlayers", lstPlayers.SelectedItems[0].Text);
                 if (lstMaps.SelectedItems.Count > 0) settings.SaveSetting("DukeSelectedMap", lstMaps.SelectedItems[0].Text);
                 settings.SaveSetting("SelectedGame", "Duke Nukem 3D");
             }
@@ -101,18 +116,20 @@ namespace Duke
             if (comboGame.Text == "Shadow Warrior")
             {
                 if (txtGamePath.Text != "") settings.SaveSetting("SWFolder", txtGamePath.Text);
-                if (lstPlayers.SelectedItems.Count > 0) settings.SaveSetting("SWNumPlayers", lstPlayers.SelectedItems[0].Text);
                 if (lstMaps.SelectedItems.Count > 0) settings.SaveSetting("SWSelectedMap", lstMaps.SelectedItems[0].Text);
                 settings.SaveSetting("SelectedGame", "Shadow Warrior");
             }
 
+            settings.SaveSetting("Players", comboPlayers.Text);
             if (lstIp.SelectedItems.Count > 0) settings.SaveSetting("IP", lstIp.SelectedItems[0].Text);
             if (txtDosBoxPath.Text != "") settings.SaveSetting("DOSBoxFolder", txtDosBoxPath.Text);
             if (txtDosBoxCapturePath.Text != "") settings.SaveSetting("DOSBoxCaptureFolder", txtDosBoxCapturePath.Text);
             if (txtSharedConfig.Text != "") settings.SaveSetting("SharedConfigFolder", txtSharedConfig.Text);
 
             if (File.Exists(cfgShared)) File.Delete(cfgShared);
+            if (File.Exists(userFile)) File.Delete(userFile);
             if (txtPlayerName.Text != "") modifyName(txtPlayerName.Text);
+
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -193,6 +210,8 @@ namespace Duke
                     addLine("");
                     addLine("Game started.");
 
+                    if (File.Exists(userFile)) File.Delete(userFile);
+
                     modifyPlayers(Convert.ToInt32(players));
                     modifyName(txtPlayerName.Text);
 
@@ -232,6 +251,8 @@ namespace Duke
                 addLine("Game ended.");
                 TimeSpan duration = DateTime.Now - gameStarted;
                 addLine("Duration: " + Convert.ToInt32(duration.TotalMinutes) + " mins, " + Convert.ToInt32(duration.Seconds) + " secs.");
+                
+                File.WriteAllText(userFile, "");
 
                 enableAll();
                 if (server) deleteSharedConfig();
@@ -257,7 +278,6 @@ namespace Duke
         private void btnLaunch_Click(object sender, EventArgs e)
         {
             if (lstMaps.SelectedItems.Count > 0 &&
-                lstPlayers.SelectedItems.Count > 0 &&
                 lstIp.SelectedItems.Count > 0 &&
                 Directory.Exists(pathShared) &&
                 Directory.Exists(pathGame) &&
@@ -269,6 +289,8 @@ namespace Duke
                 addLine("");
                 addLine("Server started.");
                 addLine("Game started.");
+                
+                if (File.Exists(userFile)) File.Delete(userFile);
 
                 int tries = 0;
                 do
@@ -279,7 +301,10 @@ namespace Duke
                 copyMap();
                 saveLastPlayed();
 
-                modifyPlayers(Convert.ToInt32(lstPlayers.SelectedItems[0].Text));
+                //modifyPlayers(Convert.ToInt32(lstPlayers.SelectedItems[0].Text));
+                if (numOfPlayers == 0) modifyPlayers(lstOnline.Items.Count);
+                else modifyPlayers(numOfPlayers);
+
                 modifyName(txtPlayerName.Text);
 
                 using (StreamWriter writer = File.CreateText(batGame))
@@ -466,6 +491,35 @@ namespace Duke
         private void btnSaveDescription_Click(object sender, EventArgs e)
         {
             saveDescription();
+        }
+
+        private void timer4_Tick(object sender, EventArgs e)
+        {
+            loadDescription();
+            loadLastPlayed();
+            refreshOnline();
+        }
+
+        private void comboPlayers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboPlayers.Text == "Auto") numOfPlayers = 0;
+            else numOfPlayers = Convert.ToInt32(comboPlayers.Text);
+        }
+
+        private void btnSendMessage_Click(object sender, EventArgs e)
+        {
+            if (txtSendMessage.Text != "" && Directory.Exists(pathShared))
+            {
+                addLine(DateTime.Now.ToString(@"yyyy-MM-dd_HH-mm-ss"));
+                
+                //File.WriteAllText(userFile, "");
+            }
+            txtSendMessage.Text = "";
+        }
+
+        private void txtSendMessage_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) btnSendMessage.PerformClick();
         }
 
 

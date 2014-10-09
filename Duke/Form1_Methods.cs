@@ -18,6 +18,50 @@ namespace Duke
 {
     public partial class Form1
     {
+        private void drawLines()
+        {
+            lineV2(0, 191, 675); // pysty - erottaa mapit muusta
+            lineV2(0, 701, 470); // pysty - erottaa userit muusta
+            lineH2(316, 0, 893); // vaaka - viestikentän alla
+            lineH2(470, 0, 893); // vaaka - kansioiden päällä
+        }
+        
+        private void lineV2 (int top, int left, int height)
+        {
+            lineV(top, left, height, Color.Silver, true);
+            lineV(top, left + 1, height, Color.White, false);
+        }
+
+        private void lineH2(int top, int left, int width)
+        {
+            lineH(top, left, width, Color.Silver, true);
+            lineH(top + 1, left, width, Color.White, false);
+        }
+
+        private void lineV(int top, int left, int height, Color color, bool front)
+        {
+            Panel line = new Panel();
+            line.Top = top;
+            line.Left = left;
+            line.Width = 1;
+            line.Height = height;
+            line.BackColor = color;
+            this.Controls.Add(line);
+            if (front) line.BringToFront();
+        }
+
+        private void lineH(int top, int left, int width, Color color, bool front)
+        {
+            Panel line = new Panel();
+            line.Top = top;
+            line.Left = left;
+            line.Width = width;
+            line.Height = 1;
+            line.BackColor = color;
+            this.Controls.Add(line);
+            if (front) line.BringToFront();
+        }
+
         private void selectItems()
         {
             foreach (ListViewItem item in lstMaps.Items)
@@ -27,11 +71,6 @@ namespace Duke
                     item.Selected = true;
                     lstMaps.EnsureVisible(lstMaps.SelectedItems[0].Index);
                 }
-            }
-
-            foreach (ListViewItem item in lstPlayers.Items)
-            {
-                if (playersSelected == item.Text) item.Selected = true;
             }
 
             foreach (ListViewItem item in lstIp.Items)
@@ -56,6 +95,7 @@ namespace Duke
                 mapSelected = settings.LoadSetting("SWSelectedMap");
             }
 
+            comboPlayers.Text = settings.LoadSetting("Players");
             txtDosBoxPath.Text = settings.LoadSetting("DOSBoxFolder");
             txtDosBoxCapturePath.Text = settings.LoadSetting("DOSBoxCaptureFolder");
             txtSharedConfig.Text = settings.LoadSetting("SharedConfigFolder");
@@ -69,17 +109,16 @@ namespace Duke
             if (comboGameOld == "Duke Nukem 3D")
             {
                 if (txtGamePath.Text != "") settings.SaveSetting("DukeFolder", txtGamePath.Text);
-                if (lstPlayers.SelectedItems.Count > 0) settings.SaveSetting("DukeNumPlayers", lstPlayers.SelectedItems[0].Text);
                 if (lstMaps.SelectedItems.Count > 0) settings.SaveSetting("DukeSelectedMap", lstMaps.SelectedItems[0].Text);
             }
 
             if (comboGameOld == "Shadow Warrior")
             {
                 if (txtGamePath.Text != "") settings.SaveSetting("SWFolder", txtGamePath.Text);
-                if (lstPlayers.SelectedItems.Count > 0) settings.SaveSetting("SWNumPlayers", lstPlayers.SelectedItems[0].Text);
                 if (lstMaps.SelectedItems.Count > 0) settings.SaveSetting("SWSelectedMap", lstMaps.SelectedItems[0].Text);
             }
 
+            settings.SaveSetting("Players", comboPlayers.Text);
             if (lstIp.SelectedItems.Count > 0) settings.SaveSetting("IP", lstIp.SelectedItems[0].Text);
             if (txtDosBoxPath.Text != "") settings.SaveSetting("DOSBoxFolder", txtDosBoxPath.Text);
             if (txtDosBoxCapturePath.Text != "") settings.SaveSetting("DOSBoxCaptureFolder", txtDosBoxCapturePath.Text);
@@ -118,6 +157,11 @@ namespace Duke
 
             exeShared = Path.Combine(pathShared, "Duke.exe");
             exeLocal = Path.Combine(appDir, "Duke.exe");
+            exeSharedUpdater = Path.Combine(pathShared, "Updater.exe");
+            exeLocalUpdater = Path.Combine(appDir, "Updater.exe");
+
+            userName = Environment.UserName;
+            userFile = Path.Combine(pathShared, "online_" + userName);
 
             if (Directory.Exists(pathGame))
             {
@@ -150,6 +194,30 @@ namespace Duke
                         addLine("***** Program update available! (v" + versionSharedString + ") *****");
                     }
                 }
+
+                if (File.Exists(exeSharedUpdater) && File.Exists(exeLocalUpdater))
+                {
+                    var versionInfoSharedUpdater = FileVersionInfo.GetVersionInfo(exeSharedUpdater);
+                    string versionSharedStringUpdater = versionInfoSharedUpdater.ProductVersion;
+                    int versionSharedUpdater = Convert.ToInt32(versionInfoSharedUpdater.ProductVersion.Replace(".", ""));
+
+                    var versionInfoLocalUpdater = FileVersionInfo.GetVersionInfo(exeLocalUpdater);
+                    string versionLocalStringUpdater = versionInfoLocalUpdater.ProductVersion;
+                    int versionLocalUpdater = Convert.ToInt32(versionInfoLocalUpdater.ProductVersion.Replace(".", ""));
+
+                    if (versionSharedUpdater > versionLocalUpdater)
+                    {
+                        File.Delete(exeLocalUpdater);
+                        File.Copy(exeSharedUpdater, exeLocalUpdater);
+                    }
+                }
+
+                else if (File.Exists(exeSharedUpdater))
+                {
+                    File.Copy(exeSharedUpdater, exeLocalUpdater);
+                }
+
+
             }
         }
 
@@ -167,10 +235,43 @@ namespace Duke
                 foreach (string map in mapList)
                 {
                     lstMaps.Items.Add(Path.GetFileName(map).ToUpper());
+                    
+                    /*
+                    ListViewItem item = new ListViewItem("test");
+                    item.SubItems.Add(Path.GetFileName(map).ToUpper());
+                    item.UseItemStyleForSubItems = false;
+                    lstMaps.Items.Add(item);
+                    */
                 }
                 lstMaps.EndUpdate();
             }
         }
+
+        /*
+        private void colorMaps()
+        {
+            lstMaps.BeginUpdate();
+            foreach (ListViewItem item in lstMaps.Items)
+            {
+                string mapLp = Path.GetFileNameWithoutExtension(item.SubItems[1].Text) + ".LP";
+                string mapDesc = Path.GetFileNameWithoutExtension(item.SubItems[1].Text) + ".TXT";
+                
+                string mapLpFile = Path.Combine(Path.Combine(pathShared, comboGame.Text), mapLp);
+                string mapDescFile = Path.Combine(Path.Combine(pathShared, comboGame.Text), mapDesc);
+                
+                if (File.Exists(mapLpFile))
+                {
+                    item.SubItems[1].ForeColor = Color.Beige;
+                }
+                else 
+                {
+                    item.SubItems[1].ForeColor = Color.Gray;
+                }
+
+            }
+            lstMaps.EndUpdate();
+        }
+        */
 
         private void modifyPlayers(int num)
         {
@@ -232,7 +333,7 @@ namespace Duke
         {
             string timestamp = DateTime.Now.ToString(@"HH:mm:ss");
             if (line != "") line = timestamp + "  " + line;
-            else line = "--------";
+            else line = "--------------";
 
             textBox1.Text = textBox1.Text + line + System.Environment.NewLine;
             Application.DoEvents();
@@ -251,7 +352,8 @@ namespace Duke
                     writer.WriteLine(txtPlayerName.Text);
                     writer.WriteLine(lstIp.SelectedItems[0].Text);
                     writer.WriteLine(lstMaps.SelectedItems[0].Text);
-                    writer.WriteLine(lstPlayers.SelectedItems[0].Text);
+                    if (numOfPlayers == 0) writer.WriteLine(lstOnline.Items.Count);
+                    else writer.WriteLine(comboPlayers.Text);
                 }
 
                 server = true;
@@ -282,12 +384,14 @@ namespace Duke
 
                 foreach (var ip in ipProps.UnicastAddresses)
                 {
-                    if ((adapter.OperationalStatus == OperationalStatus.Up)
-                        && (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork))
+                    if ((adapter.OperationalStatus == OperationalStatus.Up) && (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork))
                     {
-                        ListViewItem item = new ListViewItem(ip.Address.ToString(), 0);
-                        item.SubItems.Add(adapter.Description.ToString());
-                        lstIp.Items.Add(item);
+                        if (!IPAddress.IsLoopback(ip.Address))
+                        {
+                            ListViewItem item = new ListViewItem(ip.Address.ToString(), 0);
+                            item.SubItems.Add(adapter.Description.ToString());
+                            lstIp.Items.Add(item);
+                        }
                     }
                 }
             }
@@ -298,7 +402,6 @@ namespace Duke
             addLine("");
             addLine("Can't launch game:");
             if (lstMaps.SelectedItems.Count == 0) addLine("Map not selected.");
-            if (lstPlayers.SelectedItems.Count == 0) addLine("Number of players not selected.");
             if (lstIp.SelectedItems.Count == 0) addLine("IP address not selected.");
             if (txtPlayerName.Text == "") addLine("Player name not defined.");
             if (!Directory.Exists(pathGame)) addLine("Game folder not selected.");
@@ -309,17 +412,16 @@ namespace Duke
         private void resizeColumns()
         {
             clmMaps.Width = lstMaps.ClientRectangle.Width;
-            clmPlayers.Width = lstPlayers.ClientRectangle.Width;
             clmIp.Width = -1;
             clmIp.Width = clmIp.Width + 20;
             clmAdapter.Width = lstIp.ClientRectangle.Width - clmIp.Width;
+            clmOnline.Width = lstOnline.ClientRectangle.Width;
         }
 
         private void disableAll()
         {
             btnLaunch.Enabled = false;
             lstMaps.Enabled = false;
-            lstPlayers.Enabled = false;
             lstIp.Enabled = false;
             txtDosBoxPath.Enabled = false;
             txtGamePath.Enabled = false;
@@ -341,13 +443,13 @@ namespace Duke
             txtDescription.Enabled = false;
             txtLastPlayed.Enabled = false;
             picMapImage.Enabled = false;
+            lstOnline.Enabled = false;
         }
 
         private void enableAll()
         {
             btnLaunch.Enabled = true;
             lstMaps.Enabled = true;
-            lstPlayers.Enabled = true;
             lstIp.Enabled = true;
             txtDosBoxPath.Enabled = true;
             txtGamePath.Enabled = true;
@@ -369,6 +471,7 @@ namespace Duke
             txtDescription.Enabled = true;
             txtLastPlayed.Enabled = true;
             picMapImage.Enabled = true;
+            lstOnline.Enabled = true;
         }
 
         private void centerForm()
@@ -476,6 +579,8 @@ namespace Duke
                     {
                         string mapFile = Path.Combine(Path.Combine(pathShared, comboGame.Text), map.Text);
                         string mapImage = Path.Combine(Path.Combine(pathShared, comboGame.Text), Path.GetFileNameWithoutExtension(map.Text)) + ".PNG";
+                        string mapDesc = Path.Combine(Path.Combine(pathShared, comboGame.Text), Path.GetFileNameWithoutExtension(map.Text)) + ".TXT";
+                        string mapLp = Path.Combine(Path.Combine(pathShared, comboGame.Text), Path.GetFileNameWithoutExtension(map.Text)) + ".LP";
 
                         if (File.Exists(mapFile))
                         {
@@ -483,12 +588,9 @@ namespace Duke
                             addLine("Map \"" + map.Text + "\" deleted.");
                         }
 
-                        if (File.Exists(mapImage))
-                        {
-                            File.Delete(mapImage);
-                            string filenameImage = Path.GetFileNameWithoutExtension(map.Text) + ".PNG";
-                            addLine("Image \"" + filenameImage + "\" deleted.");
-                        }
+                        if (File.Exists(mapImage)) File.Delete(mapImage);
+                        if (File.Exists(mapDesc)) File.Delete(mapDesc);
+                        if (File.Exists(mapLp)) File.Delete(mapLp);
                     }
                 }
                 else
@@ -547,26 +649,29 @@ namespace Duke
 
         private void loadDescription()
         {
-            txtDescription.Text = "";
-
-            if (lstMaps.SelectedItems.Count == 1)
+            if (txtDescription.Focused == false && btnSaveDescription.Focused == false)
             {
-                string mapName = Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text);
-                string descName = mapName + ".txt";
-                string descFile = Path.Combine(Path.Combine(pathShared, comboGame.Text), descName);
-
-                if (File.Exists(descFile))
+                if (lstMaps.SelectedItems.Count == 1)
                 {
-                    StringBuilder newFile = new StringBuilder();
+                    string mapName = Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text);
+                    string descName = mapName + ".txt";
+                    string descFile = Path.Combine(Path.Combine(pathShared, comboGame.Text), descName);
 
-                    string[] file = File.ReadAllLines(descFile);
-
-                    foreach (string line in file)
+                    if (File.Exists(descFile))
                     {
-                        newFile.Append(line + "\r\n");
+                        StringBuilder newFile = new StringBuilder();
+
+                        string[] file = File.ReadAllLines(descFile);
+
+                        foreach (string line in file)
+                        {
+                            newFile.Append(line + "\r\n");
+                        }
+                        txtDescription.Text = newFile.ToString();
                     }
-                    txtDescription.Text = newFile.ToString();
+                    else txtDescription.Text = "";
                 }
+                else txtDescription.Text = "";
             }
         }
 
@@ -586,8 +691,6 @@ namespace Duke
 
         private void loadLastPlayed()
         {
-            txtLastPlayed.Text = "Never";
-
             if (lstMaps.SelectedItems.Count == 1)
             {
                 string mapName = Path.GetFileNameWithoutExtension(lstMaps.SelectedItems[0].Text);
@@ -597,9 +700,32 @@ namespace Duke
                 if (File.Exists(lpFile))
                 {
                     string[] file = File.ReadAllLines(lpFile);
-                    txtLastPlayed.Text = file[0].ToString();
+                    txtLastPlayed.Text = "Last played: " + file[0].ToString();
                 }
+                else txtLastPlayed.Text = "Last played: never";
             }
+            else txtLastPlayed.Text = "";
+        }
+
+        private void refreshOnline()
+        {
+            string wildcard = "online_*";
+            online = Directory.GetFiles(pathShared, wildcard, SearchOption.TopDirectoryOnly);
+
+            if (!online.SequenceEqual(onlineOld))
+            {
+                lstOnline.BeginUpdate();
+                lstOnline.Items.Clear();
+
+                foreach (string file in online)
+                {
+                    string user = Path.GetFileNameWithoutExtension(file).Replace("online_", "");
+                    lstOnline.Items.Add(user);
+                }
+
+                lstOnline.EndUpdate();
+            }
+            onlineOld = online;
         }
 
 
