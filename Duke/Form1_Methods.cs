@@ -160,7 +160,7 @@ namespace Duke
             exeGameCommit = Path.Combine(pathGame, "commit.exe");
             cfgGameCommit = Path.Combine(pathGame, "commit.dat");
             batGame = Path.Combine(pathGame, "dukiaine.bat");
-            cfgShared = Path.Combine(pathShared, "dukiainen.txt");
+            cfgShared = Path.Combine(pathShared, "server");
 
             exeShared = Path.Combine(pathShared, "Duke.exe");
             exeLocal = Path.Combine(appDir, "Duke.exe");
@@ -170,6 +170,17 @@ namespace Duke
             userName = Environment.UserName;
             userFile = Path.Combine(pathShared, "online_" + userName);
             termFile = Path.Combine(pathShared, "terminate");
+            soloFile = Path.Combine(pathShared, "solo");
+
+            modCOMSource = Path.Combine(pathShared, "mod.com");
+            modGRPSource = Path.Combine(pathShared, "mod.grp");
+            modSCNSource = Path.Combine(pathShared, "mod.scn");
+            modSWXSource = Path.Combine(pathShared, "mod.swx");
+
+            modCOMDest = Path.Combine(pathGame, "mod.com");
+            modGRPDest = Path.Combine(pathGame, "mod.grp");
+            modSCNDest = Path.Combine(pathGame, "mod.scn");
+            modSWXDest = Path.Combine(pathGame, "mod.swx");
 
             if (Directory.Exists(pathGame))
             {
@@ -197,7 +208,7 @@ namespace Duke
                         if (versionShared > versionLocal)
                         {
                             addLine("");
-                            addLine("* * * * * Program update available! (v" + versionSharedString + ") * * * * *");
+                            addLine("Program update available! (v" + versionSharedString + ")");
                         }
                     }
 
@@ -226,7 +237,12 @@ namespace Duke
 
                 }
             }
-            catch { }
+            
+            catch (Exception ex)
+            {
+                addLine("Error checking update.");
+                addLine(ex.Message + " (Code 1)");
+            }
         }
 
         private void readMaps()
@@ -251,10 +267,12 @@ namespace Duke
                     clmMaps.Text = "Maps  (" + lstMaps.Items.Count + ")";
                 }
             }
-            catch 
+            
+            catch (Exception ex)
             {
                 addLine("");
                 addLine("Error reading maps.");
+                addLine(ex.Message + " (Code 2)");
             }
         }
 
@@ -278,7 +296,42 @@ namespace Duke
 
                 File.WriteAllText(cfgGameCommit, newFile.ToString());
             }
-            catch { }
+            
+            catch (Exception ex)
+            {
+                addLine("Error setting player count.");
+                addLine(ex.Message + " (Code 3)");
+            }
+        }
+
+        private void modifyMod(bool mod)
+        {
+            try
+            {
+                StringBuilder newFile = new StringBuilder();
+
+                string[] file = File.ReadAllLines(cfgGameCommit);
+
+                foreach (string line in file)
+                {
+                    if (line.Contains("LAUNCHNAME = "))
+                    {
+                        string temp;
+                        if (mod) temp = "LAUNCHNAME = \"MOD.COM\"";
+                        else temp = "LAUNCHNAME = \"SW.EXE\"";
+                        newFile.Append(temp + "\r\n");
+                    }
+                    else newFile.Append(line + "\r\n");
+                }
+
+                File.WriteAllText(cfgGameCommit, newFile.ToString());
+            }
+
+            catch (Exception ex)
+            {
+                addLine("Error setting player count.");
+                addLine(ex.Message + " (Code 3)");
+            }
         }
 
         private void modifyName(string name)
@@ -301,7 +354,12 @@ namespace Duke
 
                 File.WriteAllText(cfgGame, newFile.ToString());
             }
-            catch { }
+            
+            catch (Exception ex)
+            {
+                addLine("Error setting player name.");
+                addLine(ex.Message + " (Code 4)");
+            }
         }
 
         private void readName()
@@ -326,9 +384,12 @@ namespace Duke
                     txtPlayerName.Text = name;
                 }
             }
-            catch
+            
+            catch (Exception ex)
             {
                 txtPlayerName.Text = "Error!";
+                addLine("Error reading player name.");
+                addLine(ex.Message + " (Code 5)");
             }
         }
 
@@ -419,7 +480,12 @@ namespace Duke
                 server = true;
                 return true;
             }
-            catch { }
+            
+            catch (Exception ex)
+            {
+                addLine("Error creating server.");
+                addLine(ex.Message + " (Code 6)");
+            }
             return false;
         }
 
@@ -430,14 +496,24 @@ namespace Duke
                 if (File.Exists(cfgShared)) File.Delete(cfgShared);
                 server = false;
             }
-            catch { }
+            
+            catch (Exception ex)
+            {
+                addLine("Error deleting server.");
+                addLine(ex.Message + " (Code 7)");
+            }
 
             try // again
             {
                 if (File.Exists(cfgShared)) File.Delete(cfgShared);
                 server = false;
             }
-            catch { }
+            
+            catch (Exception ex)
+            {
+                addLine("Error deleting server.");
+                addLine(ex.Message + " (Code 8)");
+            }
         }
 
         private void listIp()
@@ -564,7 +640,12 @@ namespace Duke
                             else picMapImage.Image = null;
 
                         }
-                        catch { }
+                        
+                        catch (Exception ex)
+                        {
+                            addLine("Error saving capture.");
+                            addLine(ex.Message + " (Code 9)");
+                        }
 
                         try
                         {
@@ -582,12 +663,22 @@ namespace Duke
                                 File.Move(file, destFileCustom);
                             }
                         }
-                        catch { }
+                        
+                        catch (Exception ex)
+                        {
+                            addLine("Error saving capture.");
+                            addLine(ex.Message + " (Code 10)");
+                        }
 
                     }
                 }
             }
-            catch { }
+            
+            catch (Exception ex)
+            {
+                addLine("Error saving capture.");
+                addLine(ex.Message + " (Code 11)");
+            }
         }
 
         private void copyMap()
@@ -608,9 +699,48 @@ namespace Duke
                 }
                 else copied = false;
             }
-            catch
+            
+            catch (Exception ex)
             {
+                addLine("Error copying map.");
+                addLine(ex.Message + " (Code 12)");
                 copied = false;
+            }
+        }
+
+        private void copyMod()
+        {
+            try
+            {
+                if (File.Exists(modCOMSource))
+                {
+                    if (File.Exists(modCOMDest)) File.Delete(modCOMDest);
+                    File.Copy(modCOMSource, modCOMDest);
+                }
+
+                if (File.Exists(modGRPSource))
+                {
+                    if (File.Exists(modGRPDest)) File.Delete(modGRPDest);
+                    File.Copy(modGRPSource, modGRPDest);
+                }
+
+                if (File.Exists(modSCNSource))
+                {
+                    if (File.Exists(modSCNDest)) File.Delete(modSCNDest);
+                    File.Copy(modSCNSource, modSCNDest);
+                }
+
+                if (File.Exists(modSWXSource))
+                {
+                    if (File.Exists(modSWXDest)) File.Delete(modSWXDest);
+                    File.Copy(modSWXSource, modSWXDest);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                addLine("Error copying mod.");
+                addLine(ex.Message + " (Code 12.5)");
             }
         }
 
@@ -628,8 +758,11 @@ namespace Duke
                     }
                     copied = false;
                 }
-                catch
+                
+                catch (Exception ex)
                 {
+                    addLine("Error deleting copied map.");
+                    addLine(ex.Message + " (Code 13)");
                     copied = false;
                 }
             }
@@ -678,18 +811,22 @@ namespace Duke
                         if (lstMaps.Items.Count > i) lstMaps.Items[i].Selected = true;
                         else lstMaps.Items[lstMaps.Items.Count - 1].Selected = true;
                     }
+                    
                     else
                     {
                         readMaps();
                         if (lstMaps.Items.Count > 0) lstMaps.Items[0].Selected = true;
                     }
+                    
                     if (lstMaps.SelectedItems.Count > 0) lstMaps.EnsureVisible(lstMaps.SelectedItems[0].Index);
                     resizeColumns();
                 }
             }
-            catch
+            
+            catch (Exception ex)
             {
-                addLine("Can't delete maps.");
+                addLine("Error deleting maps.");
+                addLine(ex.Message + " (Code 14)");
             }
         }
 
@@ -709,11 +846,13 @@ namespace Duke
                         addLine("");
                         addLine("Map description for \"" + mapName + ".MAP\" deleted.");
                     }
+                    
                     else if (txtDescription.Text.Trim() == "")
                     {
                         addLine("");
                         addLine("Map description not changed.");
                     }
+                    
                     else
                     {
                         File.WriteAllText(descFile, txtDescription.Text);
@@ -728,10 +867,12 @@ namespace Duke
                     addLine("Select one map to save description.");
                 }
             }
-            catch
+            
+            catch (Exception ex)
             {
                 addLine("");
-                addLine("Can't save description.");
+                addLine("Error saving description.");
+                addLine(ex.Message + " (Code 15)");
             }
         }
 
@@ -751,21 +892,27 @@ namespace Duke
                         {
                             StringBuilder newFile = new StringBuilder();
 
-                            string[] file = File.ReadAllLines(descFile);
-
-                            foreach (string line in file)
+                            using (StreamReader sr = new StreamReader(File.Open(descFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
                             {
-                                newFile.Append(line + "\r\n");
+                                String line;
+                                while ((line = sr.ReadLine()) != null)
+                                {
+                                    newFile.Append(line + "\r\n");
+                                }
                             }
                             txtDescription.Text = newFile.ToString();
+
                         }
                         else txtDescription.Text = "";
                     }
                     else txtDescription.Text = "";
                 }
             }
-            catch
+            
+            catch (Exception ex)
             {
+                addLine("Error loading description.");
+                addLine(ex.Message + " (Code 16)");
                 txtDescription.Text = "";
             }
         }
@@ -785,7 +932,11 @@ namespace Duke
                     File.WriteAllText(lpFile, lastPlayed);
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                addLine("Error saving last played date.");
+                addLine(ex.Message + " (Code 17)");
+            }
         }
 
         private void loadLastPlayed()
@@ -807,8 +958,11 @@ namespace Duke
                 }
                 else txtLastPlayed.Text = "";
             }
-            catch 
+            
+            catch (Exception ex)
             {
+                addLine("Error loading last played date.");
+                addLine(ex.Message + " (Code 18)");
                 txtLastPlayed.Text = "";
             }
         }
@@ -837,7 +991,12 @@ namespace Duke
 
                 clmOnline.Text = "Users online  (" + lstOnline.Items.Count + ")";
             }
-            catch { }
+            
+            catch (Exception ex)
+            {
+                addLine("Error refreshing online players.");
+                addLine(ex.Message + " (Code 19)");
+            }
         }
 
         private void checkMessages()
@@ -880,7 +1039,12 @@ namespace Duke
                 }
                 messagesOld = messages;
             }
-            catch { }
+            
+            catch (Exception ex)
+            {
+                addLine("Error reading messages.");
+                addLine(ex.Message + " (Code 20)");
+            }
         }
 
         private void deleteOldMessages()
@@ -905,20 +1069,25 @@ namespace Duke
                     DateTime nowDate = DateTime.Now;
 
                     TimeSpan difference = nowDate - msgDate;
-                    if (difference.TotalMinutes > 5)
+                    if (difference.TotalMinutes > 60)
                     {
                         tryToDelete(file);
                     }
                 }
             }
-            catch { }
+            
+            catch (Exception ex)
+            {
+                addLine("Error deleting old messages.");
+                addLine(ex.Message + " (Code 21)");
+            }
         }
 
         private void checkTerminated()
         {
             try
             {
-                if (File.Exists(termFile) && (gameOn))
+                if (File.Exists(termFile) && (gameOn) && !soloMode)
                 {
                     string[] msg = File.ReadAllLines(termFile);
 
@@ -929,10 +1098,43 @@ namespace Duke
                     {
                         if (process != null) process.Kill();
                     }
-                    catch { }
+                    
+                    catch (Exception ex)
+                    {
+                        addLine("Error checking for termination.");
+                        addLine(ex.Message + " (Code 22)");
+                    }
                 }
             }
-            catch { }
+            
+            catch (Exception ex)
+            {
+                addLine("Error checking for termination.");
+                addLine(ex.Message + " (Code 23)");
+            }
+        }
+
+        private void checkSolo()
+        {
+            try
+            {
+                if (File.Exists(soloFile))
+                {
+                    btnSolo.BackColor = Color.LightGreen;
+                    soloMode = true;
+                }
+                else
+                {
+                    btnSolo.BackColor = Color.Transparent;
+                    soloMode = false;
+                }
+            }
+            
+            catch (Exception ex)
+            {
+                addLine("Error checking for solo.");
+                addLine(ex.Message + " (Code 24)");
+            }
         }
 
         private void cancelGame(string user)
@@ -967,8 +1169,11 @@ namespace Duke
                 }
                 return false;
             }
-            catch
+            
+            catch (Exception ex)
             {
+                addLine("Error deleting file.");
+                addLine(ex.Message + " (Code 25)");
                 return false;
             }
         }
@@ -980,8 +1185,11 @@ namespace Duke
                 File.WriteAllText(userFile, "");
                 return true;
             }
-            catch
+            
+            catch (Exception ex)
             {
+                addLine("Error creating user file.");
+                addLine(ex.Message + " (Code 26)");
                 return false;
             }
         }
@@ -1007,21 +1215,26 @@ namespace Duke
                         disableAll();
 
                         addLine("");
-                        addLine("Game started as server.");
+                        if (!soloMode) addLine("Game started as server.");
+                        else addLine("Game started as solo.");
 
                         tryToDelete(termFile);
                         tryToDelete(userFile);
 
-                        int tries = 0; // ***************** CHECK!!!!!
-                        do
-                        {
-                            tries++;
-                        } while (createSharedConfig() == false || tries < 50);
+                        if (!createSharedConfig() && !soloMode) createSharedConfig();
 
                         copyMap();
-                        saveLastPlayed();
+                        
+                        if (comboGame.Text == "Shadow Warrior")
+                        {
+                            copyMod();
+                            modifyMod(File.Exists(modCOMSource));
+                        }
 
-                        if (numOfPlayers == 0) modifyPlayers(lstOnline.Items.Count);
+                        if (!soloMode) saveLastPlayed();
+
+                        if (soloMode) modifyPlayers(1);
+                        else if (numOfPlayers == 0) modifyPlayers(lstOnline.Items.Count);
                         else modifyPlayers(numOfPlayers);
 
                         modifyName(txtPlayerName.Text);
@@ -1046,14 +1259,16 @@ namespace Duke
                         gameStarted = DateTime.Now;
                         timerGameEnded.Start();
                     }
-                    catch
+                    
+                    catch (Exception ex)
                     {
                         gameOn = false;
                         enableAll();
                         deleteCopiedMap();
                         timerGameEnded.Stop();
                         addLine("");
-                        addLine("Failed.");
+                        addLine("Error starting server.");
+                        addLine(ex.Message + " (Code 27)");
                     }
                 }
                 else checkChoices();
@@ -1101,7 +1316,7 @@ namespace Duke
                                 addLine("Game \"" + game + "\" (" + players + " players).");
                                 addLine("Map \"" + map + "\"");
                                 addLine("");
-                                addLine("Waiting for server to get ready.");
+                                //addLine("Waiting for server to get ready.");
 
                                 lastMapPlayed = map;
 
@@ -1110,7 +1325,8 @@ namespace Duke
                             timeOld = time;
                         }
                     }
-                    catch
+                    
+                    catch (Exception ex)
                     {
                         timerStartClient.Stop();
                         timerContinueClient.Stop();
@@ -1118,7 +1334,8 @@ namespace Duke
                         enableAll();
                         client = false;
                         addLine("");
-                        addLine("Failed.");
+                        addLine("Error connecting to server.");
+                        addLine(ex.Message + " (Code 28)");
                     }
                 }
             }
@@ -1149,6 +1366,12 @@ namespace Duke
 
                     copyMap();
 
+                    if (comboGame.Text == "Shadow Warrior")
+                    {
+                        copyMod();
+                        modifyMod(File.Exists(modCOMSource));
+                    }
+
                     using (StreamWriter writer = File.CreateText(batGame))
                     {
                         writer.WriteLine("ipxnet connect " + ip);
@@ -1168,13 +1391,15 @@ namespace Duke
                     timerGameEnded.Start();
                 }
             }
-            catch
+            
+            catch (Exception ex)
             {
                 timerGameEnded.Stop();
                 timerContinueClient.Stop();
 
                 addLine("");
                 addLine("Game terminated.");
+                addLine(ex.Message + " (Code 29)");
 
                 tryToCreateUserFile();
                 enableAll();
@@ -1215,13 +1440,15 @@ namespace Duke
                     timerStartClient.Start();
                 }
             }
-            catch // sama sisältö kuin try'n "if (process.HasExited)":ssa!!!
+            
+            catch (Exception ex) // sama sisältö kuin try'n "if (process.HasExited)":ssa!!!
             {
                 timerGameEnded.Stop();
 
                 TimeSpan duration = DateTime.Now - gameStarted;
                 addLine("");
                 addLine("Game ended. Duration: " + Convert.ToInt32(duration.TotalMinutes) + " mins, " + Convert.ToInt32(duration.Seconds) + " secs.");
+                addLine(ex.Message + " (Code 30)");
 
                 File.WriteAllText(userFile, "");
 

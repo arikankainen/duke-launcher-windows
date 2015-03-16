@@ -68,6 +68,7 @@
             this.timerNewMessage = new System.Windows.Forms.Timer(this.components);
             this.btnTerminate = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.btnSolo = new System.Windows.Forms.Button();
             this.lstMaps = new Duke.VisualStylesListView();
             this.clmMaps = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lstOnline = new Duke.VisualStylesListView();
@@ -75,6 +76,7 @@
             this.lstIp = new Duke.VisualStylesListView();
             this.clmIp = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clmAdapter = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnRefresh = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picMapImage)).BeginInit();
             this.SuspendLayout();
             // 
@@ -229,7 +231,6 @@
             // 
             // timerContinueClient
             // 
-            this.timerContinueClient.Interval = 5000;
             this.timerContinueClient.Tick += new System.EventHandler(this.timerContinueClient_Tick);
             // 
             // picMapImage
@@ -361,9 +362,9 @@
             this.btnDeleteMaps.Location = new System.Drawing.Point(14, 290);
             this.btnDeleteMaps.Margin = new System.Windows.Forms.Padding(5);
             this.btnDeleteMaps.Name = "btnDeleteMaps";
-            this.btnDeleteMaps.Size = new System.Drawing.Size(167, 23);
+            this.btnDeleteMaps.Size = new System.Drawing.Size(79, 23);
             this.btnDeleteMaps.TabIndex = 1;
-            this.btnDeleteMaps.Text = "Delete selected maps";
+            this.btnDeleteMaps.Text = "Delete";
             this.btnDeleteMaps.UseVisualStyleBackColor = true;
             this.btnDeleteMaps.Click += new System.EventHandler(this.btnDeleteMaps_Click);
             // 
@@ -406,7 +407,7 @@
             // timerCheckAll
             // 
             this.timerCheckAll.Enabled = true;
-            this.timerCheckAll.Interval = 1000;
+            this.timerCheckAll.Interval = 500;
             this.timerCheckAll.Tick += new System.EventHandler(this.timerCheckAll_Tick);
             // 
             // comboPlayers
@@ -484,9 +485,9 @@
             this.btnTerminate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnTerminate.Location = new System.Drawing.Point(711, 582);
             this.btnTerminate.Name = "btnTerminate";
-            this.btnTerminate.Size = new System.Drawing.Size(165, 23);
+            this.btnTerminate.Size = new System.Drawing.Size(79, 23);
             this.btnTerminate.TabIndex = 34;
-            this.btnTerminate.Text = "Terminate all games";
+            this.btnTerminate.Text = "Terminate all";
             this.btnTerminate.UseVisualStyleBackColor = true;
             this.btnTerminate.Click += new System.EventHandler(this.btnTerminate_Click);
             // 
@@ -505,6 +506,17 @@
             this.richTextBox1.Size = new System.Drawing.Size(484, 294);
             this.richTextBox1.TabIndex = 6;
             this.richTextBox1.Text = "";
+            // 
+            // btnSolo
+            // 
+            this.btnSolo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSolo.Location = new System.Drawing.Point(799, 582);
+            this.btnSolo.Name = "btnSolo";
+            this.btnSolo.Size = new System.Drawing.Size(79, 23);
+            this.btnSolo.TabIndex = 35;
+            this.btnSolo.Text = "Solo mode";
+            this.btnSolo.UseVisualStyleBackColor = true;
+            this.btnSolo.Click += new System.EventHandler(this.btnSolo_Click);
             // 
             // lstMaps
             // 
@@ -574,11 +586,25 @@
             this.clmAdapter.Text = "Adapter name";
             this.clmAdapter.Width = 113;
             // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnRefresh.Location = new System.Drawing.Point(102, 290);
+            this.btnRefresh.Margin = new System.Windows.Forms.Padding(5);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(79, 23);
+            this.btnRefresh.TabIndex = 36;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(890, 617);
+            this.Controls.Add(this.btnRefresh);
+            this.Controls.Add(this.btnSolo);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.btnTerminate);
             this.Controls.Add(this.comboGame);
@@ -676,6 +702,8 @@
         private System.Windows.Forms.Timer timerNewMessage;
         private System.Windows.Forms.Button btnTerminate;
         private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Button btnSolo;
+        private System.Windows.Forms.Button btnRefresh;
     }
 }
 

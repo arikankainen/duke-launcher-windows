@@ -31,6 +31,16 @@ namespace Duke
         private string pathShared;
         private string cfgShared;
 
+        private string modCOMSource;
+        private string modGRPSource;
+        private string modSCNSource;
+        private string modSWXSource;
+
+        private string modCOMDest;
+        private string modGRPDest;
+        private string modSCNDest;
+        private string modSWXDest;
+
         private string exeGameCommit;
         private string cfgGameCommit;
         private string cfgGame;
@@ -51,6 +61,7 @@ namespace Duke
         private string userName;
         private string userFile;
         private string termFile;
+        private string soloFile;
 
         private int numOfPlayers;
 
@@ -79,6 +90,7 @@ namespace Duke
         private bool gameOn = false;
 
         private bool lastIsMessage = false;
+        private bool soloMode = false;
 
         private Color timestampNotification = ColorTranslator.FromHtml("#396590");
         private Color timestampMessage = ColorTranslator.FromHtml("#aa3635");
@@ -375,12 +387,12 @@ namespace Duke
 
         private void timerStartClient_Tick(object sender, EventArgs e)
         {
-            startClient();
+            if (!soloMode) startClient();
         }
 
         private void timerContinueClient_Tick(object sender, EventArgs e)
         {
-            continueClient();
+            if (!soloMode) continueClient();
         }
 
         private void timerGameEnded_Tick(object sender, EventArgs e) 
@@ -392,6 +404,7 @@ namespace Duke
         {
             if (!firstLoad)
             {
+                checkSolo();
                 loadDescription();
                 loadLastPlayed();
                 refreshOnline();
@@ -399,13 +412,19 @@ namespace Duke
                 checkMessages();
                 checkTerminated();
 
+                if (this.ContainsFocus)
+                {
+                    newMessage = false;
+                }
+
                 if (!this.ContainsFocus && newMessage)
                 {
                     timerNewMessage.Start();
                     newMessage = false;
                     newMessageBlinkStarted = true;
                 }
-                else if (this.ContainsFocus && newMessageBlinkStarted)
+                
+                if (this.ContainsFocus && newMessageBlinkStarted)
                 {
                     timerNewMessage.Stop();
                     newMessageBlinkStarted = false;
@@ -427,6 +446,31 @@ namespace Duke
                 this.Icon = icoMessage;
                 newMessageState = true;
             }
+        }
+
+        private void btnSolo_Click(object sender, EventArgs e)
+        {
+            if (!soloMode)
+            {
+                File.WriteAllText(soloFile, "");
+            }
+            else
+            {
+                tryToDelete(soloFile);
+            }
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            int i = 0;
+            if (lstMaps.SelectedItems.Count > 0) i = lstMaps.SelectedItems[0].Index;
+
+            readMaps();
+
+            if (i > lstMaps.Items.Count - 1) lstMaps.Items[lstMaps.Items.Count - 1].Selected = true;
+            else if (i <= lstMaps.Items.Count - 1) lstMaps.Items[i].Selected = true;
+
+            if (lstMaps.SelectedItems.Count > 0) lstMaps.EnsureVisible(lstMaps.SelectedItems[0].Index);
         }
 
 
