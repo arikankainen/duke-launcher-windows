@@ -129,8 +129,11 @@ namespace Duke
             readMaps();
             listIp();
 
-            deleteOldMessages();
-            tryToCreateUserFile();
+            if (Directory.Exists(pathShared))
+            {
+                deleteOldMessages();
+                tryToCreateUserFile();
+            }
         }
 
         // ************************************ EVENTS
@@ -375,14 +378,27 @@ namespace Duke
 
         private void btnTerminate_Click(object sendePcbr, EventArgs e)
         {
-            var result = MessageBox.Show("Are you sure you want to terminate all games?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk);
-            if (result == DialogResult.Yes) File.WriteAllText(termFile, userName);
-
+            //var result = MessageBox.Show("Are you sure you want to terminate all games?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk);
+            //if (result == DialogResult.Yes) File.WriteAllText(termFile, userName);
+            File.WriteAllText(termFile, userName);
+            addLine("");
+            addLine("Game terminated.");
         }
 
         private void btnLaunch_Click(object sender, EventArgs e)
         {
-            startServer();
+            if (btnLaunch.Text == "Launch game")
+            {
+                if (comboPlayers.Text == "Auto") startServer();
+                else if (Convert.ToInt32(comboPlayers.Text) > lstOnline.Items.Count) waitPlayers();
+                else startServer();
+            }
+
+            else
+            {
+                timerWaitPlayers.Stop();
+                btnLaunch.Text = "Launch game";
+            }
         }
 
         private void timerStartClient_Tick(object sender, EventArgs e)
@@ -402,34 +418,39 @@ namespace Duke
 
         private void timerCheckAll_Tick(object sender, EventArgs e)
         {
-            if (!firstLoad)
+            if (Directory.Exists(pathShared))
             {
-                checkSolo();
-                loadDescription();
-                loadLastPlayed();
-                refreshOnline();
-                deleteOldMessages();
-                checkMessages();
-                checkTerminated();
+                if (!firstLoad)
+                {
+                    checkSolo();
+                    loadDescription();
+                    loadLastPlayed();
+                    refreshOnline();
+                    deleteOldMessages();
+                    checkMessages();
+                    checkTerminated();
 
-                if (this.ContainsFocus)
-                {
-                    newMessage = false;
-                }
+                    /*
+                    if (this.ContainsFocus)
+                    {
+                        newMessage = false;
+                    }
 
-                if (!this.ContainsFocus && newMessage)
-                {
-                    timerNewMessage.Start();
-                    newMessage = false;
-                    newMessageBlinkStarted = true;
-                }
-                
-                if (this.ContainsFocus && newMessageBlinkStarted)
-                {
-                    timerNewMessage.Stop();
-                    newMessageBlinkStarted = false;
-                    newMessageState = false;
-                    this.Icon = ico;
+                    if (!this.ContainsFocus && newMessage)
+                    {
+                        timerNewMessage.Start();
+                        newMessage = false;
+                        newMessageBlinkStarted = true;
+                    }
+
+                    if (this.ContainsFocus && newMessageBlinkStarted)
+                    {
+                        timerNewMessage.Stop();
+                        newMessageBlinkStarted = false;
+                        newMessageState = false;
+                        this.Icon = ico;
+                    }
+                    */
                 }
             }
         }
@@ -471,6 +492,15 @@ namespace Duke
             else if (i <= lstMaps.Items.Count - 1) lstMaps.Items[i].Selected = true;
 
             if (lstMaps.SelectedItems.Count > 0) lstMaps.EnsureVisible(lstMaps.SelectedItems[0].Index);
+        }
+
+        private void timerWaitPlayers_Tick(object sender, EventArgs e)
+        {
+            if (Convert.ToInt32(comboPlayers.Text) == lstOnline.Items.Count)
+            {
+                waitPlayersStop();
+                startServer();
+            }
         }
 
 
