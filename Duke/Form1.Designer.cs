@@ -506,7 +506,7 @@
             this.richTextBox1.Margin = new System.Windows.Forms.Padding(6);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(482, 296);
+            this.richTextBox1.Size = new System.Drawing.Size(482, 295);
             this.richTextBox1.TabIndex = 6;
             this.richTextBox1.Text = "";
             // 
