@@ -71,6 +71,10 @@
             this.btnSolo = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.timerWaitPlayers = new System.Windows.Forms.Timer(this.components);
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.lstMaps = new Duke.VisualStylesListView();
             this.clmMaps = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lstOnline = new Duke.VisualStylesListView();
@@ -78,7 +82,6 @@
             this.lstIp = new Duke.VisualStylesListView();
             this.clmIp = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clmAdapter = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.timerWaitPlayers = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picMapImage)).BeginInit();
             this.SuspendLayout();
             // 
@@ -544,6 +547,42 @@
             this.textBox1.Size = new System.Drawing.Size(485, 297);
             this.textBox1.TabIndex = 37;
             // 
+            // timerWaitPlayers
+            // 
+            this.timerWaitPlayers.Interval = 500;
+            this.timerWaitPlayers.Tick += new System.EventHandler(this.timerWaitPlayers_Tick);
+            // 
+            // textBox2
+            // 
+            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox2.Location = new System.Drawing.Point(710, 32);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(5);
+            this.textBox2.MaxLength = 10;
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(166, 20);
+            this.textBox2.TabIndex = 38;
+            // 
+            // label8
+            // 
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(709, 14);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(61, 13);
+            this.label8.TabIndex = 39;
+            this.label8.Text = "User name:";
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(709, 62);
+            this.button1.Margin = new System.Windows.Forms.Padding(5);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(167, 23);
+            this.button1.TabIndex = 40;
+            this.button1.Text = "Update name";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // lstMaps
             // 
             this.lstMaps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -571,11 +610,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lstOnline.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.clmOnline});
-            this.lstOnline.Location = new System.Drawing.Point(710, 14);
+            this.lstOnline.Location = new System.Drawing.Point(710, 95);
             this.lstOnline.Margin = new System.Windows.Forms.Padding(5);
             this.lstOnline.MultiSelect = false;
             this.lstOnline.Name = "lstOnline";
-            this.lstOnline.Size = new System.Drawing.Size(167, 266);
+            this.lstOnline.Size = new System.Drawing.Size(167, 185);
             this.lstOnline.TabIndex = 25;
             this.lstOnline.UseCompatibleStateImageBehavior = false;
             this.lstOnline.View = System.Windows.Forms.View.Details;
@@ -601,6 +640,7 @@
             this.lstIp.TabIndex = 5;
             this.lstIp.UseCompatibleStateImageBehavior = false;
             this.lstIp.View = System.Windows.Forms.View.Details;
+            this.lstIp.SelectedIndexChanged += new System.EventHandler(this.lstIp_SelectedIndexChanged);
             // 
             // clmIp
             // 
@@ -612,16 +652,14 @@
             this.clmAdapter.Text = "Adapter name";
             this.clmAdapter.Width = 113;
             // 
-            // timerWaitPlayers
-            // 
-            this.timerWaitPlayers.Interval = 500;
-            this.timerWaitPlayers.Tick += new System.EventHandler(this.timerWaitPlayers_Tick);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(890, 617);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.btnRefresh);
@@ -726,6 +764,9 @@
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Timer timerWaitPlayers;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button button1;
     }
 }
 

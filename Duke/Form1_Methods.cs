@@ -1210,7 +1210,12 @@ namespace Duke
 
         private void startServer()
         {
-                if (lstMaps.SelectedItems.Count > 0 &&
+            if (lstIp.SelectedItems.Count == 0 && lstIp.Items.Count > 0)
+            {
+                lstIp.Items[0].Selected = true;
+            }
+
+            if (lstMaps.SelectedItems.Count > 0 &&
                     lstIp.SelectedItems.Count > 0 &&
                     Directory.Exists(pathShared) &&
                     Directory.Exists(pathGame) &&
@@ -1286,6 +1291,11 @@ namespace Duke
 
         private void startClient()
         {
+            if (lstIp.SelectedItems.Count == 0 && lstIp.Items.Count > 0)
+            {
+                lstIp.Items[0].Selected = true;
+            }
+
             if (!server && !client)
             {
                 if (File.Exists(cfgShared) &&

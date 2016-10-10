@@ -481,6 +481,10 @@ namespace Duke
             }
         }
 
+        private void lstIp_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             int i = 0;
