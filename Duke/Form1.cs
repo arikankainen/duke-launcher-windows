@@ -116,6 +116,8 @@ namespace Duke
 
             drawLines();
 
+            txtUserName.Text = settings.LoadSetting("UserName");
+
             comboGame.Text = settings.LoadSetting("SelectedGame");
             if (comboGame.Text == "") comboGame.Text = "Duke Nukem 3D";
 
@@ -157,6 +159,8 @@ namespace Duke
             timerGameEnded.Stop();
             timerContinueClient.Stop();
             timerCheckAll.Stop();
+
+            settings.SaveSetting("UserName", txtUserName.Text);
 
             if (comboGame.Text == "Duke Nukem 3D")
             {
@@ -483,6 +487,25 @@ namespace Duke
 
         private void lstIp_SelectedIndexChanged(object sender, EventArgs e)
         {
+        }
+
+        private void btnChangeUserName_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(pathShared))
+            {
+                tryToDelete(cfgShared);
+                tryToDelete(userFile);
+                deleteOldMessages();
+
+                updatePaths();
+
+                tryToCreateUserFile();
+            }
+        }
+
+        private void txtUserName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) btnChangeUserName.PerformClick();
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)

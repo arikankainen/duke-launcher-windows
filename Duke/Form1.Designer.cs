@@ -72,9 +72,9 @@
             this.btnRefresh = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.timerWaitPlayers = new System.Windows.Forms.Timer(this.components);
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtUserName = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnChangeUserName = new System.Windows.Forms.Button();
             this.lstMaps = new Duke.VisualStylesListView();
             this.clmMaps = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lstOnline = new Duke.VisualStylesListView();
@@ -552,15 +552,16 @@
             this.timerWaitPlayers.Interval = 500;
             this.timerWaitPlayers.Tick += new System.EventHandler(this.timerWaitPlayers_Tick);
             // 
-            // textBox2
+            // txtUserName
             // 
-            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox2.Location = new System.Drawing.Point(710, 32);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(5);
-            this.textBox2.MaxLength = 10;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(166, 20);
-            this.textBox2.TabIndex = 38;
+            this.txtUserName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtUserName.Location = new System.Drawing.Point(710, 32);
+            this.txtUserName.Margin = new System.Windows.Forms.Padding(5);
+            this.txtUserName.MaxLength = 25;
+            this.txtUserName.Name = "txtUserName";
+            this.txtUserName.Size = new System.Drawing.Size(166, 20);
+            this.txtUserName.TabIndex = 38;
+            this.txtUserName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtUserName_KeyDown);
             // 
             // label8
             // 
@@ -572,16 +573,17 @@
             this.label8.TabIndex = 39;
             this.label8.Text = "User name:";
             // 
-            // button1
+            // btnChangeUserName
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(709, 62);
-            this.button1.Margin = new System.Windows.Forms.Padding(5);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(167, 23);
-            this.button1.TabIndex = 40;
-            this.button1.Text = "Update name";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnChangeUserName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnChangeUserName.Location = new System.Drawing.Point(709, 62);
+            this.btnChangeUserName.Margin = new System.Windows.Forms.Padding(5);
+            this.btnChangeUserName.Name = "btnChangeUserName";
+            this.btnChangeUserName.Size = new System.Drawing.Size(167, 23);
+            this.btnChangeUserName.TabIndex = 40;
+            this.btnChangeUserName.Text = "Change name";
+            this.btnChangeUserName.UseVisualStyleBackColor = true;
+            this.btnChangeUserName.Click += new System.EventHandler(this.btnChangeUserName_Click);
             // 
             // lstMaps
             // 
@@ -657,9 +659,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(890, 617);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnChangeUserName);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.txtUserName);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.btnRefresh);
@@ -764,9 +766,9 @@
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Timer timerWaitPlayers;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtUserName;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnChangeUserName;
     }
 }
 

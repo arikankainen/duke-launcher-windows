@@ -167,7 +167,10 @@ namespace Duke
             exeSharedUpdater = Path.Combine(pathShared, "Updater.exe");
             exeLocalUpdater = Path.Combine(appDir, "Updater.exe");
 
-            userName = Environment.UserName;
+            //userName = Environment.UserName;
+            if (txtUserName.Text == "") userName = Environment.UserName;
+            else userName = txtUserName.Text;
+
             userFile = Path.Combine(pathShared, "online_" + userName);
             termFile = Path.Combine(pathShared, "terminate");
             soloFile = Path.Combine(pathShared, "solo");
