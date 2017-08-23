@@ -111,8 +111,8 @@ namespace Duke
             icoEmpty = Properties.Resources.duke_empty;
             icoMessage = Properties.Resources.duke_message;
 
-            this.Width = 906;
-            this.Height = 654;
+            //this.Width = 906;
+            //this.Height = 654;
 
             drawLines();
 
@@ -151,6 +151,7 @@ namespace Duke
             txtSendMessage.Focus();
 
             firstLoad = false;
+            lstMaps.ListViewItemSorter = new ListViewItemComparer(0, lstMaps.Sorting);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -258,7 +259,7 @@ namespace Duke
 
         private void txtPlayerName_KeyDown(object sender, KeyEventArgs e)
         {
-            if ((e.KeyCode > Keys.D0 && e.KeyCode < Keys.Z) ||
+            if ((e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.Z) ||
                 e.KeyCode == Keys.Back ||
                 e.KeyCode == Keys.Space ||
                 e.KeyCode == Keys.Left ||
@@ -506,6 +507,26 @@ namespace Duke
         private void txtUserName_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter) btnChangeUserName.PerformClick();
+        }
+
+        private void lstMaps_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            lstMaps.BeginUpdate();
+
+            if (lstMaps.Sorting == SortOrder.Ascending)
+            {
+                lstMaps.Sorting = SortOrder.Descending;
+                lstMaps.SetSortIcon(e.Column, SortOrder.Descending);
+            }
+
+            else
+            {
+                lstMaps.Sorting = SortOrder.Ascending;
+                lstMaps.SetSortIcon(e.Column, SortOrder.Ascending);
+            }
+
+            lstMaps.Sort();
+            lstMaps.ListViewItemSorter = new ListViewItemComparer(e.Column, lstMaps.Sorting);
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)

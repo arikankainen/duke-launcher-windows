@@ -20,6 +20,16 @@ namespace Duke
     {
         private void drawLines()
         {
+            lineV2(0, lstMaps.Right + 10, this.ClientRectangle.Height, (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left)); // pysty - erottaa mapit muusta
+            lineV2(0, lstIp.Right + 10, this.ClientRectangle.Height, (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right)); // pysty - erottaa userit muusta
+
+            lineH2(btnDeleteMaps.Bottom + 10, 0, lstMaps.Right + 10, (AnchorStyles.Left | AnchorStyles.Bottom)); // vaaka - mappilistan alla
+            lineH2(btnUpdate.Bottom + 10, richTextBox1.Right + 11, this.ClientRectangle.Width - (richTextBox1.Right + 11), (AnchorStyles.Right | AnchorStyles.Bottom)); // vaaka - userlistan alla
+
+            lineH2(lstIp.Bottom + 10, lstMaps.Right + 10, lstIp.Width + 22, (AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top)); // vaaka - ip listan alla
+            lineH2(btnSendMessage.Bottom + 10, lstMaps.Right + 10, lstIp.Width + 22, (AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top)); // vaaka - ip listan alla
+
+            /*
             lineV2(0, 191, 675, (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left)); // pysty - erottaa mapit muusta
             lineV2(0, 698, 675, (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right)); // pysty - erottaa userit muusta
 
@@ -28,8 +38,9 @@ namespace Duke
 
             lineH2(120, 191, 507, (AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top)); // vaaka - ip listan alla
             lineH2(471, 191, 507, (AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom)); // vaaka - chatin alla
+            */
         }
-        
+
         private void lineV2 (int top, int left, int height, AnchorStyles a)
         {
             lineV(top, left, height, Color.Silver, true, a);
@@ -248,6 +259,48 @@ namespace Duke
             }
         }
 
+        private string getLastPlayed(string file)
+        {
+            string mapName = Path.GetFileNameWithoutExtension(file);
+            string lpName = mapName + ".lp";
+            string lpFile = Path.Combine(Path.Combine(pathShared, comboGame.Text), lpName);
+
+            string lp = "never";
+            if (File.Exists(lpFile))
+            {
+                string[] file2 = File.ReadAllLines(lpFile);
+                lp = file2[0].ToString();
+            }
+
+            return parseDate(lp);
+        }
+
+        private string parseDate(string date)
+        {
+            try
+            {
+                string[] temp = date.Split('.');
+
+                string str = date;
+
+                if (temp.Count() == 3)
+                {
+                    string day = temp[0].PadLeft(2, '0');
+                    string month = temp[1].PadLeft(2, '0');
+                    string year = temp[2];
+
+                    str = year + "-" + month + "-" + day;
+                }
+
+                return str;
+            }
+
+            catch
+            {
+                return date;
+            }
+        }
+
         private void readMaps()
         {
             try
@@ -263,7 +316,9 @@ namespace Duke
 
                     foreach (string map in mapList)
                     {
-                        lstMaps.Items.Add(Path.GetFileName(map).ToUpper());
+                        ListViewItem item = new ListViewItem(Path.GetFileName(map).ToUpper());
+                        item.SubItems.Add(getLastPlayed(map));
+                        lstMaps.Items.Add(item);
                     }
                     lstMaps.EndUpdate();
 
@@ -556,7 +611,9 @@ namespace Duke
 
         private void resizeColumns()
         {
-            clmMaps.Width = lstMaps.ClientRectangle.Width;
+            clmMaps.Width = lstMaps.ClientRectangle.Width / 2;
+            clmPlayed.Width = lstMaps.ClientRectangle.Width / 2;
+
             clmIp.Width = -1;
             clmAdapter.Width = lstIp.ClientRectangle.Width - clmIp.Width;
             clmOnline.Width = lstOnline.ClientRectangle.Width;
@@ -1106,7 +1163,7 @@ namespace Duke
                     
                     catch (Exception ex)
                     {
-                        addLine("Error checking for termination.");
+                        addLine("Error terminating game.");
                         addLine(ex.Message + " (Code 22).");
                     }
                 }

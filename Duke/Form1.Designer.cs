@@ -77,6 +77,7 @@
             this.btnChangeUserName = new System.Windows.Forms.Button();
             this.lstMaps = new Duke.VisualStylesListView();
             this.clmMaps = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.clmPlayed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lstOnline = new Duke.VisualStylesListView();
             this.clmOnline = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lstIp = new Duke.VisualStylesListView();
@@ -90,7 +91,7 @@
             this.btnLaunch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLaunch.BackColor = System.Drawing.Color.Transparent;
             this.btnLaunch.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLaunch.Location = new System.Drawing.Point(710, 475);
+            this.btnLaunch.Location = new System.Drawing.Point(977, 703);
             this.btnLaunch.Margin = new System.Windows.Forms.Padding(5);
             this.btnLaunch.Name = "btnLaunch";
             this.btnLaunch.Size = new System.Drawing.Size(167, 99);
@@ -105,18 +106,18 @@
             this.txtGamePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtGamePath.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtGamePath.Location = new System.Drawing.Point(286, 485);
+            this.txtGamePath.Location = new System.Drawing.Point(391, 713);
             this.txtGamePath.Margin = new System.Windows.Forms.Padding(5);
             this.txtGamePath.Name = "txtGamePath";
             this.txtGamePath.ReadOnly = true;
-            this.txtGamePath.Size = new System.Drawing.Size(277, 20);
+            this.txtGamePath.Size = new System.Drawing.Size(439, 20);
             this.txtGamePath.TabIndex = 10;
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(200, 488);
+            this.label1.Location = new System.Drawing.Point(307, 716);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(67, 13);
             this.label1.TabIndex = 9;
@@ -125,7 +126,7 @@
             // btnGamePath
             // 
             this.btnGamePath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGamePath.Location = new System.Drawing.Point(573, 483);
+            this.btnGamePath.Location = new System.Drawing.Point(840, 711);
             this.btnGamePath.Margin = new System.Windows.Forms.Padding(5);
             this.btnGamePath.Name = "btnGamePath";
             this.btnGamePath.Size = new System.Drawing.Size(59, 23);
@@ -139,18 +140,18 @@
             this.txtDosBoxPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDosBoxPath.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtDosBoxPath.Location = new System.Drawing.Point(286, 518);
+            this.txtDosBoxPath.Location = new System.Drawing.Point(391, 746);
             this.txtDosBoxPath.Margin = new System.Windows.Forms.Padding(5);
             this.txtDosBoxPath.Name = "txtDosBoxPath";
             this.txtDosBoxPath.ReadOnly = true;
-            this.txtDosBoxPath.Size = new System.Drawing.Size(277, 20);
+            this.txtDosBoxPath.Size = new System.Drawing.Size(439, 20);
             this.txtDosBoxPath.TabIndex = 14;
             // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(200, 521);
+            this.label2.Location = new System.Drawing.Point(307, 749);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(80, 13);
             this.label2.TabIndex = 13;
@@ -159,7 +160,7 @@
             // btnDosBoxPath
             // 
             this.btnDosBoxPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDosBoxPath.Location = new System.Drawing.Point(573, 516);
+            this.btnDosBoxPath.Location = new System.Drawing.Point(840, 744);
             this.btnDosBoxPath.Margin = new System.Windows.Forms.Padding(5);
             this.btnDosBoxPath.Name = "btnDosBoxPath";
             this.btnDosBoxPath.Size = new System.Drawing.Size(59, 23);
@@ -173,18 +174,18 @@
             this.txtSharedConfig.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSharedConfig.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtSharedConfig.Location = new System.Drawing.Point(286, 584);
+            this.txtSharedConfig.Location = new System.Drawing.Point(391, 812);
             this.txtSharedConfig.Margin = new System.Windows.Forms.Padding(5);
             this.txtSharedConfig.Name = "txtSharedConfig";
             this.txtSharedConfig.ReadOnly = true;
-            this.txtSharedConfig.Size = new System.Drawing.Size(277, 20);
+            this.txtSharedConfig.Size = new System.Drawing.Size(439, 20);
             this.txtSharedConfig.TabIndex = 22;
             // 
             // label3
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(200, 587);
+            this.label3.Location = new System.Drawing.Point(307, 815);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(73, 13);
             this.label3.TabIndex = 21;
@@ -193,7 +194,7 @@
             // btnSharedConfig
             // 
             this.btnSharedConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSharedConfig.Location = new System.Drawing.Point(573, 582);
+            this.btnSharedConfig.Location = new System.Drawing.Point(840, 810);
             this.btnSharedConfig.Margin = new System.Windows.Forms.Padding(5);
             this.btnSharedConfig.Name = "btnSharedConfig";
             this.btnSharedConfig.Size = new System.Drawing.Size(59, 23);
@@ -217,7 +218,7 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(708, 427);
+            this.label4.Location = new System.Drawing.Point(975, 655);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(68, 13);
             this.label4.TabIndex = 31;
@@ -226,7 +227,7 @@
             // txtPlayerName
             // 
             this.txtPlayerName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPlayerName.Location = new System.Drawing.Point(710, 445);
+            this.txtPlayerName.Location = new System.Drawing.Point(977, 673);
             this.txtPlayerName.Margin = new System.Windows.Forms.Padding(5);
             this.txtPlayerName.MaxLength = 10;
             this.txtPlayerName.Name = "txtPlayerName";
@@ -243,10 +244,10 @@
             this.picMapImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.picMapImage.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.picMapImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picMapImage.Location = new System.Drawing.Point(14, 334);
+            this.picMapImage.Location = new System.Drawing.Point(14, 488);
             this.picMapImage.Margin = new System.Windows.Forms.Padding(5);
             this.picMapImage.Name = "picMapImage";
-            this.picMapImage.Size = new System.Drawing.Size(167, 129);
+            this.picMapImage.Size = new System.Drawing.Size(273, 203);
             this.picMapImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picMapImage.TabIndex = 20;
             this.picMapImage.TabStop = false;
@@ -255,7 +256,7 @@
             // btnUpdate
             // 
             this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdate.Location = new System.Drawing.Point(710, 290);
+            this.btnUpdate.Location = new System.Drawing.Point(977, 518);
             this.btnUpdate.Margin = new System.Windows.Forms.Padding(5);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(167, 23);
@@ -267,7 +268,7 @@
             // btnGameOpen
             // 
             this.btnGameOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGameOpen.Location = new System.Drawing.Point(642, 483);
+            this.btnGameOpen.Location = new System.Drawing.Point(909, 711);
             this.btnGameOpen.Margin = new System.Windows.Forms.Padding(5);
             this.btnGameOpen.Name = "btnGameOpen";
             this.btnGameOpen.Size = new System.Drawing.Size(45, 23);
@@ -279,7 +280,7 @@
             // btnDosBoxOpen
             // 
             this.btnDosBoxOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDosBoxOpen.Location = new System.Drawing.Point(642, 516);
+            this.btnDosBoxOpen.Location = new System.Drawing.Point(909, 744);
             this.btnDosBoxOpen.Margin = new System.Windows.Forms.Padding(5);
             this.btnDosBoxOpen.Name = "btnDosBoxOpen";
             this.btnDosBoxOpen.Size = new System.Drawing.Size(45, 23);
@@ -291,7 +292,7 @@
             // btnSharedOpen
             // 
             this.btnSharedOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSharedOpen.Location = new System.Drawing.Point(642, 582);
+            this.btnSharedOpen.Location = new System.Drawing.Point(909, 810);
             this.btnSharedOpen.Margin = new System.Windows.Forms.Padding(5);
             this.btnSharedOpen.Name = "btnSharedOpen";
             this.btnSharedOpen.Size = new System.Drawing.Size(45, 23);
@@ -308,7 +309,7 @@
             this.comboGame.Items.AddRange(new object[] {
             "Duke Nukem 3D",
             "Shadow Warrior"});
-            this.comboGame.Location = new System.Drawing.Point(711, 349);
+            this.comboGame.Location = new System.Drawing.Point(978, 577);
             this.comboGame.Margin = new System.Windows.Forms.Padding(5);
             this.comboGame.Name = "comboGame";
             this.comboGame.Size = new System.Drawing.Size(165, 21);
@@ -318,7 +319,7 @@
             // btnDosBoxCaptureOpen
             // 
             this.btnDosBoxCaptureOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDosBoxCaptureOpen.Location = new System.Drawing.Point(642, 549);
+            this.btnDosBoxCaptureOpen.Location = new System.Drawing.Point(909, 777);
             this.btnDosBoxCaptureOpen.Margin = new System.Windows.Forms.Padding(5);
             this.btnDosBoxCaptureOpen.Name = "btnDosBoxCaptureOpen";
             this.btnDosBoxCaptureOpen.Size = new System.Drawing.Size(45, 23);
@@ -330,7 +331,7 @@
             // btnDosBoxCapturePath
             // 
             this.btnDosBoxCapturePath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDosBoxCapturePath.Location = new System.Drawing.Point(573, 549);
+            this.btnDosBoxCapturePath.Location = new System.Drawing.Point(840, 777);
             this.btnDosBoxCapturePath.Margin = new System.Windows.Forms.Padding(5);
             this.btnDosBoxCapturePath.Name = "btnDosBoxCapturePath";
             this.btnDosBoxCapturePath.Size = new System.Drawing.Size(59, 23);
@@ -343,7 +344,7 @@
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(200, 554);
+            this.label5.Location = new System.Drawing.Point(307, 782);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(76, 13);
             this.label5.TabIndex = 17;
@@ -354,17 +355,17 @@
             this.txtDosBoxCapturePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDosBoxCapturePath.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtDosBoxCapturePath.Location = new System.Drawing.Point(286, 551);
+            this.txtDosBoxCapturePath.Location = new System.Drawing.Point(391, 779);
             this.txtDosBoxCapturePath.Margin = new System.Windows.Forms.Padding(5);
             this.txtDosBoxCapturePath.Name = "txtDosBoxCapturePath";
             this.txtDosBoxCapturePath.ReadOnly = true;
-            this.txtDosBoxCapturePath.Size = new System.Drawing.Size(277, 20);
+            this.txtDosBoxCapturePath.Size = new System.Drawing.Size(439, 20);
             this.txtDosBoxCapturePath.TabIndex = 18;
             // 
             // btnDeleteMaps
             // 
             this.btnDeleteMaps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnDeleteMaps.Location = new System.Drawing.Point(14, 290);
+            this.btnDeleteMaps.Location = new System.Drawing.Point(14, 442);
             this.btnDeleteMaps.Margin = new System.Windows.Forms.Padding(5);
             this.btnDeleteMaps.Name = "btnDeleteMaps";
             this.btnDeleteMaps.Size = new System.Drawing.Size(79, 23);
@@ -376,10 +377,10 @@
             // btnSaveDescription
             // 
             this.btnSaveDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSaveDescription.Location = new System.Drawing.Point(14, 582);
+            this.btnSaveDescription.Location = new System.Drawing.Point(14, 810);
             this.btnSaveDescription.Margin = new System.Windows.Forms.Padding(5);
             this.btnSaveDescription.Name = "btnSaveDescription";
-            this.btnSaveDescription.Size = new System.Drawing.Size(167, 23);
+            this.btnSaveDescription.Size = new System.Drawing.Size(273, 23);
             this.btnSaveDescription.TabIndex = 4;
             this.btnSaveDescription.Text = "Save description";
             this.btnSaveDescription.UseVisualStyleBackColor = true;
@@ -388,11 +389,11 @@
             // txtDescription
             // 
             this.txtDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txtDescription.Location = new System.Drawing.Point(14, 503);
+            this.txtDescription.Location = new System.Drawing.Point(14, 731);
             this.txtDescription.Margin = new System.Windows.Forms.Padding(5);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(167, 69);
+            this.txtDescription.Size = new System.Drawing.Size(273, 69);
             this.txtDescription.TabIndex = 3;
             this.txtDescription.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -400,12 +401,12 @@
             // 
             this.txtLastPlayed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.txtLastPlayed.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.txtLastPlayed.Location = new System.Drawing.Point(14, 473);
+            this.txtLastPlayed.Location = new System.Drawing.Point(14, 701);
             this.txtLastPlayed.Margin = new System.Windows.Forms.Padding(5);
             this.txtLastPlayed.MaxLength = 10;
             this.txtLastPlayed.Name = "txtLastPlayed";
             this.txtLastPlayed.ReadOnly = true;
-            this.txtLastPlayed.Size = new System.Drawing.Size(167, 20);
+            this.txtLastPlayed.Size = new System.Drawing.Size(273, 20);
             this.txtLastPlayed.TabIndex = 2;
             this.txtLastPlayed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -430,7 +431,7 @@
             "6",
             "7",
             "8"});
-            this.comboPlayers.Location = new System.Drawing.Point(710, 397);
+            this.comboPlayers.Location = new System.Drawing.Point(977, 625);
             this.comboPlayers.Margin = new System.Windows.Forms.Padding(5);
             this.comboPlayers.Name = "comboPlayers";
             this.comboPlayers.Size = new System.Drawing.Size(167, 21);
@@ -441,10 +442,10 @@
             // 
             this.txtSendMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSendMessage.Location = new System.Drawing.Point(203, 441);
+            this.txtSendMessage.Location = new System.Drawing.Point(308, 669);
             this.txtSendMessage.Margin = new System.Windows.Forms.Padding(5);
             this.txtSendMessage.Name = "txtSendMessage";
-            this.txtSendMessage.Size = new System.Drawing.Size(360, 20);
+            this.txtSendMessage.Size = new System.Drawing.Size(522, 20);
             this.txtSendMessage.TabIndex = 7;
             this.txtSendMessage.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtSendMessage_KeyUp);
             // 
@@ -452,7 +453,7 @@
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(708, 379);
+            this.label7.Location = new System.Drawing.Point(975, 607);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(44, 13);
             this.label7.TabIndex = 29;
@@ -462,7 +463,7 @@
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(708, 331);
+            this.label6.Location = new System.Drawing.Point(975, 559);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(69, 13);
             this.label6.TabIndex = 27;
@@ -471,7 +472,7 @@
             // btnSendMessage
             // 
             this.btnSendMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSendMessage.Location = new System.Drawing.Point(573, 439);
+            this.btnSendMessage.Location = new System.Drawing.Point(840, 667);
             this.btnSendMessage.Margin = new System.Windows.Forms.Padding(5);
             this.btnSendMessage.Name = "btnSendMessage";
             this.btnSendMessage.Size = new System.Drawing.Size(115, 23);
@@ -488,7 +489,7 @@
             // btnTerminate
             // 
             this.btnTerminate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTerminate.Location = new System.Drawing.Point(711, 582);
+            this.btnTerminate.Location = new System.Drawing.Point(978, 810);
             this.btnTerminate.Name = "btnTerminate";
             this.btnTerminate.Size = new System.Drawing.Size(79, 23);
             this.btnTerminate.TabIndex = 34;
@@ -505,18 +506,18 @@
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox1.EnableAutoDragDrop = true;
             this.richTextBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox1.Location = new System.Drawing.Point(205, 134);
+            this.richTextBox1.Location = new System.Drawing.Point(310, 134);
             this.richTextBox1.Margin = new System.Windows.Forms.Padding(6);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(482, 295);
+            this.richTextBox1.Size = new System.Drawing.Size(644, 523);
             this.richTextBox1.TabIndex = 6;
             this.richTextBox1.Text = "";
             // 
             // btnSolo
             // 
             this.btnSolo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSolo.Location = new System.Drawing.Point(799, 582);
+            this.btnSolo.Location = new System.Drawing.Point(1066, 810);
             this.btnSolo.Name = "btnSolo";
             this.btnSolo.Size = new System.Drawing.Size(79, 23);
             this.btnSolo.TabIndex = 35;
@@ -527,10 +528,10 @@
             // btnRefresh
             // 
             this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnRefresh.Location = new System.Drawing.Point(102, 290);
+            this.btnRefresh.Location = new System.Drawing.Point(102, 442);
             this.btnRefresh.Margin = new System.Windows.Forms.Padding(5);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(79, 23);
+            this.btnRefresh.Size = new System.Drawing.Size(185, 23);
             this.btnRefresh.TabIndex = 36;
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
@@ -541,10 +542,10 @@
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(203, 133);
+            this.textBox1.Location = new System.Drawing.Point(308, 133);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(485, 297);
+            this.textBox1.Size = new System.Drawing.Size(647, 525);
             this.textBox1.TabIndex = 37;
             // 
             // timerWaitPlayers
@@ -555,7 +556,7 @@
             // txtUserName
             // 
             this.txtUserName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtUserName.Location = new System.Drawing.Point(710, 32);
+            this.txtUserName.Location = new System.Drawing.Point(977, 32);
             this.txtUserName.Margin = new System.Windows.Forms.Padding(5);
             this.txtUserName.MaxLength = 25;
             this.txtUserName.Name = "txtUserName";
@@ -567,7 +568,7 @@
             // 
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(709, 14);
+            this.label8.Location = new System.Drawing.Point(976, 14);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(61, 13);
             this.label8.TabIndex = 39;
@@ -576,7 +577,7 @@
             // btnChangeUserName
             // 
             this.btnChangeUserName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnChangeUserName.Location = new System.Drawing.Point(709, 62);
+            this.btnChangeUserName.Location = new System.Drawing.Point(976, 62);
             this.btnChangeUserName.Margin = new System.Windows.Forms.Padding(5);
             this.btnChangeUserName.Name = "btnChangeUserName";
             this.btnChangeUserName.Size = new System.Drawing.Size(167, 23);
@@ -590,15 +591,17 @@
             this.lstMaps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.lstMaps.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.clmMaps});
+            this.clmMaps,
+            this.clmPlayed});
             this.lstMaps.FullRowSelect = true;
             this.lstMaps.Location = new System.Drawing.Point(14, 14);
             this.lstMaps.Margin = new System.Windows.Forms.Padding(5);
             this.lstMaps.Name = "lstMaps";
-            this.lstMaps.Size = new System.Drawing.Size(167, 266);
+            this.lstMaps.Size = new System.Drawing.Size(273, 418);
             this.lstMaps.TabIndex = 0;
             this.lstMaps.UseCompatibleStateImageBehavior = false;
             this.lstMaps.View = System.Windows.Forms.View.Details;
+            this.lstMaps.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstMaps_ColumnClick);
             this.lstMaps.SelectedIndexChanged += new System.EventHandler(this.lstMaps_SelectedIndexChanged);
             // 
             // clmMaps
@@ -606,17 +609,22 @@
             this.clmMaps.Text = "Maps";
             this.clmMaps.Width = 120;
             // 
+            // clmPlayed
+            // 
+            this.clmPlayed.Text = "Last played";
+            this.clmPlayed.Width = 175;
+            // 
             // lstOnline
             // 
             this.lstOnline.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lstOnline.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.clmOnline});
-            this.lstOnline.Location = new System.Drawing.Point(710, 95);
+            this.lstOnline.Location = new System.Drawing.Point(977, 95);
             this.lstOnline.Margin = new System.Windows.Forms.Padding(5);
             this.lstOnline.MultiSelect = false;
             this.lstOnline.Name = "lstOnline";
-            this.lstOnline.Size = new System.Drawing.Size(167, 185);
+            this.lstOnline.Size = new System.Drawing.Size(167, 413);
             this.lstOnline.TabIndex = 25;
             this.lstOnline.UseCompatibleStateImageBehavior = false;
             this.lstOnline.View = System.Windows.Forms.View.Details;
@@ -634,11 +642,11 @@
             this.clmIp,
             this.clmAdapter});
             this.lstIp.FullRowSelect = true;
-            this.lstIp.Location = new System.Drawing.Point(203, 14);
+            this.lstIp.Location = new System.Drawing.Point(308, 14);
             this.lstIp.Margin = new System.Windows.Forms.Padding(5);
             this.lstIp.MultiSelect = false;
             this.lstIp.Name = "lstIp";
-            this.lstIp.Size = new System.Drawing.Size(485, 94);
+            this.lstIp.Size = new System.Drawing.Size(647, 98);
             this.lstIp.TabIndex = 5;
             this.lstIp.UseCompatibleStateImageBehavior = false;
             this.lstIp.View = System.Windows.Forms.View.Details;
@@ -658,7 +666,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(890, 617);
+            this.ClientSize = new System.Drawing.Size(1157, 845);
             this.Controls.Add(this.btnChangeUserName);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.txtUserName);
@@ -769,6 +777,7 @@
         private System.Windows.Forms.TextBox txtUserName;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button btnChangeUserName;
+        private System.Windows.Forms.ColumnHeader clmPlayed;
     }
 }
 
