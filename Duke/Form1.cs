@@ -18,6 +18,7 @@ namespace Duke
 {
     public partial class Form1 : Form, IMessageFilter
     {
+        private Random rnd = new Random();
         private string appName = "Duke Launcher v" + Application.ProductVersion;
 
         private string appPath;
@@ -160,6 +161,9 @@ namespace Duke
             timerGameEnded.Stop();
             timerContinueClient.Stop();
             timerCheckAll.Stop();
+
+            settings.SaveSetting("RandomChecked", checkRandom.Checked.ToString());
+            settings.SaveSetting("RandomNumber", numericRandom.Value.ToString());
 
             settings.SaveSetting("UserName", txtUserName.Text);
 
@@ -548,6 +552,62 @@ namespace Duke
             {
                 waitPlayersStop();
                 startServer();
+            }
+        }
+
+        private void btnRandom_Click(object sender, EventArgs e)
+        {
+            if (lstMaps.Items.Count > 1)
+            {
+                if (lstMaps.SelectedItems.Count == 0) lstMaps.Items[0].Selected = true;
+                int selectedOld = lstMaps.SelectedItems[0].Index;
+                int selected = selectedOld;
+
+                if (checkRandom.Checked && numericRandom.Value > 1)
+                {
+                    while (selectedOld == selected)
+                    {
+                        getRandom();
+                        selected = lstMaps.SelectedItems[0].Index;
+                    }
+                }
+                else getRandom();
+            }
+        }
+
+        private void getRandom()
+        {
+            int count = lstMaps.Items.Count;
+            int rndCount;
+
+            if (checkRandom.Checked) rndCount = (int)numericRandom.Value;
+            else rndCount = count;
+
+            if (rndCount > count) rndCount = count;
+
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+
+            foreach (ListViewItem item in lstMaps.Items)
+            {
+                dict.Add(item.Text, item.SubItems[1].Text);
+            }
+
+            var dictSorted = dict.OrderBy(x => x.Value);
+
+            int rndSelected = rnd.Next(rndCount);
+
+            string selectedMap = dictSorted.ElementAt(rndSelected).Key;
+            string selectedDate = dictSorted.ElementAt(rndSelected).Value;
+
+            foreach (ListViewItem item in lstMaps.Items)
+            {
+                if (item.Text == selectedMap)
+                {
+                    item.Selected = true;
+                    item.EnsureVisible();
+                }
+
+                else item.Selected = false;
             }
         }
 

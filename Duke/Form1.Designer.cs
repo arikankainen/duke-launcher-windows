@@ -75,6 +75,9 @@
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.btnChangeUserName = new System.Windows.Forms.Button();
+            this.btnRandom = new System.Windows.Forms.Button();
+            this.numericRandom = new System.Windows.Forms.NumericUpDown();
+            this.checkRandom = new System.Windows.Forms.CheckBox();
             this.lstMaps = new Duke.VisualStylesListView();
             this.clmMaps = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clmPlayed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -84,6 +87,7 @@
             this.clmIp = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clmAdapter = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.picMapImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericRandom)).BeginInit();
             this.SuspendLayout();
             // 
             // btnLaunch
@@ -586,6 +590,51 @@
             this.btnChangeUserName.UseVisualStyleBackColor = true;
             this.btnChangeUserName.Click += new System.EventHandler(this.btnChangeUserName_Click);
             // 
+            // btnRandom
+            // 
+            this.btnRandom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnRandom.Location = new System.Drawing.Point(14, 409);
+            this.btnRandom.Margin = new System.Windows.Forms.Padding(5);
+            this.btnRandom.Name = "btnRandom";
+            this.btnRandom.Size = new System.Drawing.Size(98, 23);
+            this.btnRandom.TabIndex = 41;
+            this.btnRandom.Text = "Select random";
+            this.btnRandom.UseVisualStyleBackColor = true;
+            this.btnRandom.Click += new System.EventHandler(this.btnRandom_Click);
+            // 
+            // numericRandom
+            // 
+            this.numericRandom.Location = new System.Drawing.Point(131, 412);
+            this.numericRandom.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.numericRandom.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericRandom.Name = "numericRandom";
+            this.numericRandom.Size = new System.Drawing.Size(56, 20);
+            this.numericRandom.TabIndex = 43;
+            this.numericRandom.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numericRandom.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // checkRandom
+            // 
+            this.checkRandom.AutoSize = true;
+            this.checkRandom.Location = new System.Drawing.Point(205, 413);
+            this.checkRandom.Name = "checkRandom";
+            this.checkRandom.Size = new System.Drawing.Size(82, 17);
+            this.checkRandom.TabIndex = 44;
+            this.checkRandom.Text = "oldest maps";
+            this.checkRandom.UseVisualStyleBackColor = true;
+            // 
             // lstMaps
             // 
             this.lstMaps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -597,7 +646,7 @@
             this.lstMaps.Location = new System.Drawing.Point(14, 14);
             this.lstMaps.Margin = new System.Windows.Forms.Padding(5);
             this.lstMaps.Name = "lstMaps";
-            this.lstMaps.Size = new System.Drawing.Size(273, 418);
+            this.lstMaps.Size = new System.Drawing.Size(273, 385);
             this.lstMaps.TabIndex = 0;
             this.lstMaps.UseCompatibleStateImageBehavior = false;
             this.lstMaps.View = System.Windows.Forms.View.Details;
@@ -667,6 +716,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1157, 845);
+            this.Controls.Add(this.checkRandom);
+            this.Controls.Add(this.numericRandom);
+            this.Controls.Add(this.btnRandom);
             this.Controls.Add(this.btnChangeUserName);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.txtUserName);
@@ -718,6 +770,7 @@
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.picMapImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericRandom)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -778,6 +831,9 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button btnChangeUserName;
         private System.Windows.Forms.ColumnHeader clmPlayed;
+        private System.Windows.Forms.Button btnRandom;
+        private System.Windows.Forms.NumericUpDown numericRandom;
+        private System.Windows.Forms.CheckBox checkRandom;
     }
 }
 

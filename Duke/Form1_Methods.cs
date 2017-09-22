@@ -99,6 +99,9 @@ namespace Duke
         
         private void loadSettings()
         {
+            numericRandom.Value = settings.LoadSetting("RandomNumber", "int", "10");
+            checkRandom.Checked = settings.LoadSetting("RandomChecked", "bool", "true");
+
             if (comboGame.Text == "Duke Nukem 3D")
             {
                 txtGamePath.Text = settings.LoadSetting("DukeFolder");
