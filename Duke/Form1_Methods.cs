@@ -25,9 +25,10 @@ namespace Duke
 
             lineH2(btnDeleteMaps.Bottom + 10, 0, lstMaps.Right + 10, (AnchorStyles.Left | AnchorStyles.Bottom)); // vaaka - mappilistan alla
             lineH2(btnUpdate.Bottom + 10, richTextBox1.Right + 11, this.ClientRectangle.Width - (richTextBox1.Right + 11), (AnchorStyles.Right | AnchorStyles.Bottom)); // vaaka - userlistan alla
+            lineH2(txtPlayerName.Bottom + 10, richTextBox1.Right + 11, this.ClientRectangle.Width - (richTextBox1.Right + 11), (AnchorStyles.Right | AnchorStyles.Bottom)); // vaaka - userlistan alla
 
             lineH2(lstIp.Bottom + 10, lstMaps.Right + 10, lstIp.Width + 22, (AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top)); // vaaka - ip listan alla
-            lineH2(btnSendMessage.Bottom + 10, lstMaps.Right + 10, lstIp.Width + 22, (AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top)); // vaaka - ip listan alla
+            lineH2(btnSendMessage.Bottom + 10, lstMaps.Right + 10, lstIp.Width + 22, (AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Bottom)); // vaaka - chating alla
 
             /*
             lineV2(0, 191, 675, (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left)); // pysty - erottaa mapit muusta
@@ -171,9 +172,11 @@ namespace Duke
 
             exeDosBox = Path.Combine(txtDosBoxPath.Text, "DOSBox.exe");
 
+            exeGameSetup = Path.Combine(pathGame, "setup.exe");
             exeGameCommit = Path.Combine(pathGame, "commit.exe");
             cfgGameCommit = Path.Combine(pathGame, "commit.dat");
             batGame = Path.Combine(pathGame, "dukebat.bat");
+            batSetup = Path.Combine(pathGame, "setupbat.bat");
             cfgShared = Path.Combine(pathShared, "server");
 
             exeShared = Path.Combine(pathShared, "Duke.exe");
@@ -641,8 +644,16 @@ namespace Duke
             btnDeleteMaps.Enabled = false;
             btnSaveDescription.Enabled = false;
             txtDescription.Enabled = false;
-            txtLastPlayed.Enabled = false;
             comboPlayers.Enabled = false;
+            btnRefresh.Enabled = false;
+            btnRandom.Enabled = false;
+            numericRandom.Enabled = false;
+            checkRandom.Enabled = false;
+            txtUserName.Enabled = false;
+            btnChangeUserName.Enabled = false;
+            btnSolo.Enabled = false;
+            checkFullScreen.Enabled = false;
+            btnSetup.Enabled = false;
         }
 
         private void enableAll()
@@ -664,8 +675,16 @@ namespace Duke
             btnDeleteMaps.Enabled = true;
             btnSaveDescription.Enabled = true;
             txtDescription.Enabled = true;
-            txtLastPlayed.Enabled = true;
             comboPlayers.Enabled = true;
+            btnRefresh.Enabled = true;
+            btnRandom.Enabled = true;
+            numericRandom.Enabled = true;
+            checkRandom.Enabled = true;
+            txtUserName.Enabled = true;
+            btnChangeUserName.Enabled = true;
+            btnSolo.Enabled = true;
+            checkFullScreen.Enabled = true;
+            btnSetup.Enabled = true;
         }
 
         private void saveCapture()
@@ -1017,18 +1036,18 @@ namespace Duke
                     if (File.Exists(lpFile))
                     {
                         string[] file = File.ReadAllLines(lpFile);
-                        txtLastPlayed.Text = "Last played: " + file[0].ToString();
+                        labelLastPlayed.Text = "Last played: " + file[0].ToString();
                     }
-                    else txtLastPlayed.Text = "Last played: never";
+                    else labelLastPlayed.Text = "Last played: never";
                 }
-                else txtLastPlayed.Text = "";
+                else labelLastPlayed.Text = "";
             }
             
             catch (Exception ex)
             {
                 addLine("Error loading last played date.");
                 addLine(ex.Message + " (Code 18).");
-                txtLastPlayed.Text = "";
+                labelLastPlayed.Text = "";
             }
         }
 
@@ -1156,6 +1175,7 @@ namespace Duke
                 {
                     string[] msg = File.ReadAllLines(termFile);
 
+                    if (!soloMode) saveLastPlayed();
                     gameOn = false;
                     cancelGame(msg[0]);
 
@@ -1218,9 +1238,9 @@ namespace Duke
             client = false;
 
             loadLastPlayed();
+            btnRefresh.PerformClick();
 
             timerStartClient.Start();
-
         }
 
         private bool tryToDelete(string file)
@@ -1285,55 +1305,62 @@ namespace Duke
                     File.Exists(exeDosBox) &&
                     comboPlayers.Text != "" &&
                     txtPlayerName.Text != "")
+            { 
+                try
                 {
-                    try
-                    {
-                        gameOn = true;
-                        disableAll();
+                    gameOn = true;
+                    disableAll();
 
-                        addLine("");
-                        if (!soloMode) addLine("Game started as server.");
-                        else addLine("Game started as solo.");
+                    addLine("");
+                    if (!soloMode) addLine("Game started as server.");
+                    else addLine("Game started as solo.");
 
-                        tryToDelete(termFile);
-                        tryToDelete(userFile);
+                    tryToDelete(termFile);
+                    tryToDelete(userFile);
 
-                        if (!createSharedConfig() && !soloMode) createSharedConfig();
+                    if (!createSharedConfig() && !soloMode) createSharedConfig();
 
-                        copyMap();
+                    copyMap();
                         
-                        if (comboGame.Text == "Shadow Warrior")
-                        {
-                            copyMod();
-                            modifyMod(File.Exists(modCOMSource));
-                        }
+                    if (comboGame.Text == "Shadow Warrior")
+                    {
+                        copyMod();
+                        modifyMod(File.Exists(modCOMSource));
+                    }
 
-                        if (!soloMode) saveLastPlayed();
+                    //if (!soloMode) saveLastPlayed();
 
-                        if (soloMode) modifyPlayers(1);
-                        else if (numOfPlayers == 0) modifyPlayers(lstOnline.Items.Count);
-                        else modifyPlayers(numOfPlayers);
+                    if (soloMode) modifyPlayers(1);
+                    else if (numOfPlayers == 0) modifyPlayers(lstOnline.Items.Count);
+                    else modifyPlayers(numOfPlayers);
 
-                        modifyName(txtPlayerName.Text);
+                    modifyName(txtPlayerName.Text);
 
-                        using (StreamWriter writer = File.CreateText(batGame))
-                        {
-                            writer.WriteLine("ipxnet startserver");
-                            writer.WriteLine("commit.exe -map " + lstMaps.SelectedItems[0].Text);
-                            writer.WriteLine("exit");
-                        }
+                    using (StreamWriter writer = File.CreateText(batGame))
+                    {
+                        writer.WriteLine("ipxnet startserver");
+                        writer.WriteLine("commit.exe -map " + lstMaps.SelectedItems[0].Text);
+                        writer.WriteLine("exit");
+                    }
 
-                        lastMapPlayed = lstMaps.SelectedItems[0].Text;
+                    lastMapPlayed = lstMaps.SelectedItems[0].Text;
 
-                        ProcessStartInfo startInfo = new ProcessStartInfo();
-                        startInfo.CreateNoWindow = false;
-                        startInfo.UseShellExecute = false;
-                        startInfo.FileName = exeDosBox;
-                        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                        startInfo.Arguments = batGame + " -noconsole";
-                        process = Process.Start(startInfo);
+                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                    startInfo.CreateNoWindow = false;
+                    startInfo.UseShellExecute = false;
+                    startInfo.FileName = exeDosBox;
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    if (checkFullScreen.Checked) startInfo.Arguments = batGame + " -noconsole -fullscreen";
+                    else startInfo.Arguments = batGame + " -noconsole";
+                    process = Process.Start(startInfo);
 
-                        gameStarted = DateTime.Now;
+                    if (!checkFullScreen.Checked)
+                    {
+                        timerDOSBoxMoved = 0;
+                        timerDOSBox.Start();
+                    }
+
+                    gameStarted = DateTime.Now;
                         timerGameEnded.Start();
                     }
                     
@@ -1397,7 +1424,7 @@ namespace Duke
                                 addLine("Player \"" + name + "\" started server (" + ip + ").");
                                 addLine("Game \"" + game + "\" (" + players + " players).");
                                 addLine("Map \"" + map + "\".");
-                                addLine("");
+                                //addLine("");
 
                                 lastMapPlayed = map;
 
@@ -1465,8 +1492,15 @@ namespace Duke
                     startInfo.UseShellExecute = false;
                     startInfo.FileName = exeDosBox;
                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    startInfo.Arguments = batGame + " -noconsole";
+                    if (checkFullScreen.Checked) startInfo.Arguments = batGame + " -noconsole -fullscreen";
+                    else startInfo.Arguments = batGame + " -noconsole";
                     process = Process.Start(startInfo);
+
+                    if (!checkFullScreen.Checked)
+                    {
+                        timerDOSBoxMoved = 0;
+                        timerDOSBox.Start();
+                    }
 
                     gameStarted = DateTime.Now;
                     timerGameEnded.Start();
@@ -1508,6 +1542,7 @@ namespace Duke
 
                     File.WriteAllText(userFile, "");
 
+                    if (!soloMode) saveLastPlayed();
                     gameOn = false;
                     enableAll();
                     if (server) deleteSharedConfig();
@@ -1517,6 +1552,7 @@ namespace Duke
 
                     saveCapture();
                     loadLastPlayed();
+                    btnRefresh.PerformClick();
 
                     timerStartClient.Start();
                 }
@@ -1542,6 +1578,7 @@ namespace Duke
 
                 saveCapture();
                 loadLastPlayed();
+                btnRefresh.PerformClick();
 
                 timerStartClient.Start();
             }

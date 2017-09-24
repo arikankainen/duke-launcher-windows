@@ -42,10 +42,12 @@ namespace Duke
         private string modSCNDest;
         private string modSWXDest;
 
+        private string exeGameSetup;
         private string exeGameCommit;
         private string cfgGameCommit;
         private string cfgGame;
         private string batGame;
+        private string batSetup;
         private string pathGame;
 
         private string exeShared;
@@ -93,13 +95,22 @@ namespace Duke
         private bool lastIsMessage = false;
         private bool soloMode = false;
 
+        private int width;
+        private int height;
+        private bool maximized = false;
+        private bool sizeLoaded = false;
+
         private Color timestampNotification = ColorTranslator.FromHtml("#396590");
         private Color timestampMessage = ColorTranslator.FromHtml("#aa3635");
         private Color separatorLine = ColorTranslator.FromHtml("#777777");
+        private Color colorNotExist = ColorTranslator.FromHtml("#ffcccc");
 
-        Icon ico;
-        Icon icoEmpty;
-        Icon icoMessage;
+        private Icon ico;
+        private Icon icoEmpty;
+        private Icon icoMessage;
+
+        private int sortColumn;
+        private int timerDOSBoxMoved;
 
         private List<string> msgList = new List<string>();
 
@@ -107,7 +118,7 @@ namespace Duke
         {
             InitializeComponent();
             Application.AddMessageFilter(this);
-            
+
             ico = this.Icon;
             icoEmpty = Properties.Resources.duke_empty;
             icoMessage = Properties.Resources.duke_message;
@@ -125,24 +136,51 @@ namespace Duke
             comboPlayers.Text = settings.LoadSetting("Players");
             if (comboPlayers.Text == "") comboPlayers.Text = "Auto";
 
+            checkFullScreen.Checked = settings.LoadSetting("FullScreen", "bool", "false");
+
             comboGameOld = comboGame.Text;
 
             loadSettings();
             updatePaths();
             readMaps();
             listIp();
+            checkRandomChecked();
 
             if (Directory.Exists(pathShared))
             {
                 deleteOldMessages();
                 tryToCreateUserFile();
             }
+
+            width = settings.LoadSetting("Width", "int", "1100");
+            height = settings.LoadSetting("Height", "int", "750");
+            maximized = settings.LoadSetting("Maximized", "bool", "false");
+
+            if (width < 700 || height < 550)
+            {
+                width = 1100;
+                height = 750;
+            }
+
+            Screen screen = Screen.FromPoint(Cursor.Position);
+            if (width > screen.WorkingArea.Size.Width) width = screen.WorkingArea.Size.Width;
+            if (height > screen.WorkingArea.Size.Height) height = screen.WorkingArea.Size.Height;
+
+            this.Width = width;
+            this.Height = height;
+
+            this.Left = screen.WorkingArea.Left + (screen.WorkingArea.Size.Width / 2) - (this.Width / 2);
+            this.Top = screen.WorkingArea.Top + (screen.WorkingArea.Size.Height / 2) - (this.Height / 2) - 1;
+
+            if (maximized) this.WindowState = FormWindowState.Maximized;
+
         }
 
         // ************************************ EVENTS
 
         private void Form1_Shown(object sender, EventArgs e)
         {
+
             selectItems();
             resizeColumns();
             readName();
@@ -152,7 +190,22 @@ namespace Duke
             txtSendMessage.Focus();
 
             firstLoad = false;
-            lstMaps.ListViewItemSorter = new ListViewItemComparer(0, lstMaps.Sorting);
+            sizeLoaded = true;
+
+            string sOrd = settings.LoadSetting("MapsSortOrder", "string", "None");
+            sortColumn = settings.LoadSetting("MapsSortColumn", "int", "0");
+
+            SortOrder order;
+            if (sOrd == "Ascending") order = SortOrder.Ascending;
+            else if (sOrd == "Descending") order = SortOrder.Descending;
+            else order = SortOrder.None;
+
+            lstMaps.Sorting = order;
+            lstMaps.SetSortIcon(sortColumn, order);
+            lstMaps.Sort();
+            if (sOrd != "None") lstMaps.ListViewItemSorter = new ListViewItemComparer(sortColumn, lstMaps.Sorting);
+
+            if (lstMaps.SelectedItems.Count > 0) lstMaps.SelectedItems[0].EnsureVisible();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -161,6 +214,15 @@ namespace Duke
             timerGameEnded.Stop();
             timerContinueClient.Stop();
             timerCheckAll.Stop();
+
+            settings.SaveSetting("Width", width.ToString());
+            settings.SaveSetting("Height", height.ToString());
+            settings.SaveSetting("FullScreen", checkFullScreen.Checked.ToString());
+            settings.SaveSetting("MapsSortOrder", lstMaps.Sorting.ToString());
+            settings.SaveSetting("MapsSortColumn", sortColumn.ToString());
+
+            if (this.WindowState == FormWindowState.Maximized) settings.SaveSetting("Maximized", "True");
+            else settings.SaveSetting("Maximized", "False");
 
             settings.SaveSetting("RandomChecked", checkRandom.Checked.ToString());
             settings.SaveSetting("RandomNumber", numericRandom.Value.ToString());
@@ -193,12 +255,22 @@ namespace Duke
             tryToDelete(userFile);
         }
 
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Normal && sizeLoaded)
+            {
+                if (this.Width > 0) width = this.Width;
+                if (this.Height > 0) height = this.Height;
+            }
+        }
+
         private void btnDukePath_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog folder = new FolderBrowserDialog();
 
             folder.ShowNewFolderButton = false;
             folder.Description = "Select game folder:";
+            if (Directory.Exists(txtGamePath.Text)) folder.SelectedPath = txtGamePath.Text;
 
             DialogResult result = folder.ShowDialog();
             if (folder.SelectedPath != "") txtGamePath.Text = folder.SelectedPath;
@@ -206,9 +278,6 @@ namespace Duke
             readMaps();
             resizeColumns();
             resizeColumns();
-
-            addLine("");
-            addLine("Game folder added.");
         }
 
         private void btnDosBoxPath_Click(object sender, EventArgs e)
@@ -217,15 +286,13 @@ namespace Duke
 
             folder.ShowNewFolderButton = false;
             folder.Description = "Select DOSBox folder:";
-            if (Directory.Exists("C:\\Program Files (x86)\\DOSBox-0.74") && txtDosBoxPath.Text == "") folder.SelectedPath = "C:\\Program Files (x86)\\DOSBox-0.74";
+            if (Directory.Exists(txtDosBoxPath.Text)) folder.SelectedPath = txtDosBoxPath.Text;
+            else if (Directory.Exists(@"C:\Program Files (x86)\DOSBox-0.74") && txtDosBoxPath.Text == "") folder.SelectedPath = @"C:\Program Files (x86)\DOSBox-0.74";
 
             DialogResult result = folder.ShowDialog();
             if (folder.SelectedPath != "") txtDosBoxPath.Text = folder.SelectedPath;
             updatePaths();
             resizeColumns();
-
-            addLine("");
-            addLine("DOSBox folder added.");
         }
 
         private void btnDosBoxCapturePath_Click(object sender, EventArgs e)
@@ -234,14 +301,12 @@ namespace Duke
 
             folder.ShowNewFolderButton = false;
             folder.Description = "Select DOSBox capture folder:\r\nUsually something like that: C:\\Users\\username\\AppData\\Local\\DOSBox\\capture";
+            if (Directory.Exists(txtDosBoxCapturePath.Text)) folder.SelectedPath = txtDosBoxCapturePath.Text;
 
             DialogResult result = folder.ShowDialog();
             if (folder.SelectedPath != "") txtDosBoxCapturePath.Text = folder.SelectedPath;
             updatePaths();
             resizeColumns();
-
-            addLine("");
-            addLine("DOSBox capture folder added.");
         }
 
         private void btnSharedConfig_Click(object sender, EventArgs e)
@@ -250,15 +315,37 @@ namespace Duke
 
             folder.ShowNewFolderButton = false;
             folder.Description = "Select Shared folder:";
+            if (Directory.Exists(txtSharedConfig.Text)) folder.SelectedPath = txtSharedConfig.Text;
 
             DialogResult result = folder.ShowDialog();
             if (folder.SelectedPath != "") txtSharedConfig.Text = folder.SelectedPath;
             updatePaths();
             readMaps();
             resizeColumns();
+        }
 
-            addLine("");
-            addLine("Shared folder added.");
+        private void txtGamePath_TextChanged(object sender, EventArgs e)
+        {
+            if (Directory.Exists(txtGamePath.Text)) txtGamePath.BackColor = Color.White;
+            else txtGamePath.BackColor = colorNotExist;
+        }
+
+        private void txtDosBoxPath_TextChanged(object sender, EventArgs e)
+        {
+            if (Directory.Exists(txtDosBoxPath.Text)) txtDosBoxPath.BackColor = Color.White;
+            else txtDosBoxPath.BackColor = colorNotExist;
+        }
+
+        private void txtDosBoxCapturePath_TextChanged(object sender, EventArgs e)
+        {
+            if (Directory.Exists(txtDosBoxCapturePath.Text)) txtDosBoxCapturePath.BackColor = Color.White;
+            else txtDosBoxCapturePath.BackColor = colorNotExist;
+        }
+
+        private void txtSharedConfig_TextChanged(object sender, EventArgs e)
+        {
+            if (Directory.Exists(txtSharedConfig.Text)) txtSharedConfig.BackColor = Color.White;
+            else txtSharedConfig.BackColor = colorNotExist;
         }
 
         private void txtPlayerName_KeyDown(object sender, KeyEventArgs e)
@@ -399,7 +486,7 @@ namespace Duke
             if (btnLaunch.Text == "Launch game")
             {
                 if (comboPlayers.Text == "Auto") startServer();
-                else if (Convert.ToInt32(comboPlayers.Text) > lstOnline.Items.Count) waitPlayers();
+                else if (!soloMode && Convert.ToInt32(comboPlayers.Text) > lstOnline.Items.Count) waitPlayers();
                 else startServer();
             }
 
@@ -433,7 +520,7 @@ namespace Duke
                 {
                     checkSolo();
                     loadDescription();
-                    loadLastPlayed();
+                    if (!gameOn) loadLastPlayed();
                     refreshOnline();
                     deleteOldMessages();
                     checkMessages();
@@ -517,33 +604,60 @@ namespace Duke
         {
             lstMaps.BeginUpdate();
 
-            if (lstMaps.Sorting == SortOrder.Ascending)
+            if (e.Column != sortColumn)
             {
-                lstMaps.Sorting = SortOrder.Descending;
-                lstMaps.SetSortIcon(e.Column, SortOrder.Descending);
-            }
-
-            else
-            {
+                sortColumn = e.Column;
                 lstMaps.Sorting = SortOrder.Ascending;
                 lstMaps.SetSortIcon(e.Column, SortOrder.Ascending);
             }
 
+            else
+            {
+                if (lstMaps.Sorting == SortOrder.Ascending)
+                {
+                    lstMaps.Sorting = SortOrder.Descending;
+                    lstMaps.SetSortIcon(e.Column, SortOrder.Descending);
+                }
+
+                else
+                {
+                    lstMaps.Sorting = SortOrder.Ascending;
+                    lstMaps.SetSortIcon(e.Column, SortOrder.Ascending);
+                }
+            }
+
             lstMaps.Sort();
             lstMaps.ListViewItemSorter = new ListViewItemComparer(e.Column, lstMaps.Sorting);
+
+            lstMaps.SelectedItems[0].EnsureVisible();
+
+            lstMaps.EndUpdate();
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            int i = 0;
-            if (lstMaps.SelectedItems.Count > 0) i = lstMaps.SelectedItems[0].Index;
+            string mapName = null;
+            if (lstMaps.SelectedItems.Count > 0) mapName = lstMaps.SelectedItems[0].Text;
+            //MessageBox.Show(mapName);
+
+            //int i = 0;
+            //if (lstMaps.SelectedItems.Count > 0) i = lstMaps.SelectedItems[0].Index;
 
             readMaps();
 
-            if (i > lstMaps.Items.Count - 1) lstMaps.Items[lstMaps.Items.Count - 1].Selected = true;
-            else if (i <= lstMaps.Items.Count - 1) lstMaps.Items[i].Selected = true;
+            //if (i > lstMaps.Items.Count - 1) lstMaps.Items[lstMaps.Items.Count - 1].Selected = true;
+            //else if (i <= lstMaps.Items.Count - 1) lstMaps.Items[i].Selected = true;
 
-            if (lstMaps.SelectedItems.Count > 0) lstMaps.EnsureVisible(lstMaps.SelectedItems[0].Index);
+            if (mapName != null)
+            {
+                foreach (ListViewItem item in lstMaps.Items)
+                {
+                    if (item.Text == mapName) item.Selected = true;
+                    else item.Selected = false;
+                }
+
+                if (lstMaps.SelectedItems.Count > 0) lstMaps.EnsureVisible(lstMaps.SelectedItems[0].Index);
+            }
         }
 
         private void timerWaitPlayers_Tick(object sender, EventArgs e)
@@ -553,6 +667,45 @@ namespace Duke
                 waitPlayersStop();
                 startServer();
             }
+        }
+
+        private void checkRandom_CheckedChanged(object sender, EventArgs e)
+        {
+            checkRandomChecked();
+        }
+
+        private void checkRandomChecked()
+        {
+            if (checkRandom.Checked) numericRandom.Enabled = true;
+            else numericRandom.Enabled = false;
+        }
+
+        private void btnSetup_Click(object sender, EventArgs e)
+        {
+            using (StreamWriter writer = File.CreateText(batSetup))
+            {
+                writer.WriteLine("setup");
+                writer.WriteLine("exit");
+            }
+
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.CreateNoWindow = false;
+            startInfo.UseShellExecute = false;
+            startInfo.FileName = exeDosBox;
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.Arguments = batSetup + " -noconsole";
+            process = Process.Start(startInfo);
+
+            timerDOSBoxMoved = 0;
+            timerDOSBox.Start();
+        }
+
+        private void timerDOSBox_Tick(object sender, EventArgs e)
+        {
+            timerDOSBoxMoved++;
+            OpenWindows.centerDOSBox(this);
+            
+            if (timerDOSBoxMoved == 20) timerDOSBox.Stop();
         }
 
         private void btnRandom_Click(object sender, EventArgs e)
